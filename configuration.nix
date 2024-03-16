@@ -89,6 +89,14 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+	programs.zsh.enable = true;
+
+	programs.neovim.defaultEditor = true;
+
+	users.defaultUserShell = pkgs.zsh;
+
+	environment.localBinInPath = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -111,13 +119,53 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    git
-    kitty
+
+		bat
+		blueberry
+		bluez
+		btop
+		cargo
+		coreutils
+		du-dust
+		dunst
+		eza
+		fzf
+		gcc
+		git
+		gnumake
+		kitty
+		libnotify
+		neofetch
     neovim
+		nodejs
+		p7zip
+		pamixer
+		pass
 		pavucontrol
+		pulsemixer
+		python3
+		python311Packages.xlib
     ranger
+		ripgrep
+		rustc
+		tldr
     tmux
+		tree
+		unzip
+		vim
+		w3m
     wget
+		xclip
+		xorg.xkill
+		zplug
+		zsh
+
+		(dmenu.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dmenu/archive/master.tar.gz";
+		# sha256="15n6c1baba8mfncbzqzdbmv4116yblfm5kl7xl5mf6vpy40y433r";
+		}; }))
+		(st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/st/archive/flexmaster.tar.gz";
+		# sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
+		}; }))
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
