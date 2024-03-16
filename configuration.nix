@@ -52,14 +52,21 @@
     useXkbConfig = true; # use xkb.options in tty.
   };
 
-  # Configure X11
-  services.xserver = {
+# Configure X11
+	services.xserver = {
 		enable = true;
-    layout = "us";
-    xkbVariant = "";
+		xkb.layout = "us";
+		xkb.options = "eurosign:e,caps:escape";
 		displayManager.lightdm.enable = true;
 		desktopManager.xfce.enable = true;
-  };
+		windowManager.dwm.package = pkgs.dwm.overrideAttrs (oldAttrs: rec {
+				src = builtins.fetchTarball {
+				url = "https://github.com/flexbusterman/dwm/archive/flexmaster.tar.gz";
+				# sha256 = "0azn8xqh9ig6bk639wywqdx8hay9ch6nk62scij7zs2xd22yv8c4";
+				};
+				});
+		windowManager.dwm.enable = true;
+	};
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
