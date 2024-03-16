@@ -11,6 +11,8 @@
       ./virtualboxfix.nix
     ];
 
+	nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # bootloader
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
@@ -25,6 +27,13 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+#  _                    _
+# | |    ___   ___ __ _| | ___
+# | |   / _ \ / __/ _` | |/ _ \
+# | |__| (_) | (_| (_| | |  __/
+# |_____\___/ \___\__,_|_|\___|
+# locale
 
   # Set your time zone.
   time.timeZone = "Europe/Stockholm";
@@ -44,15 +53,36 @@
     LC_TIME = "sv_SE.UTF-8";
   };
 
-	nix.settings.experimental-features = [ "nix-command" "flakes" ];
+#  _____                   _             _
+# |_   _|__ _ __ _ __ ___ (_)_ __   __ _| |
+#   | |/ _ \ '__| '_ ` _ \| | '_ \ / _` | |
+#   | |  __/ |  | | | | | | | | | | (_| | |
+#   |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|_|
+# terminal tty
 
+	programs.zsh.enable = true;
+	programs.neovim.defaultEditor = true;
+	users.defaultUserShell = pkgs.zsh;
+	environment.localBinInPath = true;
   console = {
     font = "Lat2-Terminus16";
     # keyMap = "us";
     useXkbConfig = true; # use xkb.options in tty.
   };
 
-# Configure X11
+# named fonts.packages on newer than 23.05
+	fonts.packages = with pkgs; [
+		noto-fonts
+		noto-fonts-emoji
+		ultimate-oldschool-pc-font-pack
+	];
+
+# __  __  _   _
+# \ \/ / / | / |
+#  \  /  | | | |
+#  /  \  | | | |
+# /_/\_\ |_| |_|
+# X11
 	services.xserver = {
 		enable = true;
 		xkb.layout = "us";
@@ -67,6 +97,13 @@
 				});
 		windowManager.dwm.enable = true;
 	};
+
+#  ____             _
+# |  _ \  _____   _(_) ___ ___  ___
+# | | | |/ _ \ \ / / |/ __/ _ \/ __|
+# | |_| |  __/\ V /| | (_|  __/\__ \
+# |____/ \___| \_/ |_|\___\___||___/
+# devices
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -87,15 +124,14 @@
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
-	programs.zsh.enable = true;
-
-	programs.neovim.defaultEditor = true;
-
-	users.defaultUserShell = pkgs.zsh;
-
-	environment.localBinInPath = true;
+#  ____            _
+# |  _ \ __ _  ___| | ____ _  __ _  ___  ___
+# | |_) / _` |/ __| |/ / _` |/ _` |/ _ \/ __|
+# |  __/ (_| | (__|   < (_| | (_| |  __/\__ \
+# |_|   \__,_|\___|_|\_\__,_|\__, |\___||___/
+# packages                   |___/
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -166,20 +202,23 @@
 		(st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/st/archive/flexmaster.tar.gz";
 		# sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
 		}; }))
+		(st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dwmblocks/archive/flex.tar.gz";
+		# sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
+		}; }))
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -201,24 +240,5 @@
     enable = true;
     x11 = true;
   };
-
-  #  systemd.user.services = let
-  #  vbox-client = desc: flags: {
-  #    description = "VirtualBox Guest: ${desc}";
-  #    wantedBy = [ "graphical-session.target" ];
-  #    requires = [ "dev-vboxguest.device" ];
-  #    after = [ "dev-vboxguest.device" ];
-  #    unitConfig.ConditionVurtualization = "oracle";
-  #    serviceConvig.ExecStart = "${config.boot.kernelPackages.virtualboxGuestAdditions}/bin/VBoxClient -fv ${flags}";
-  #  };
-  #	in {
-  #		virtualbox-resize = vbox-client "Resize" "--vmsvga";
-  #		virtualbox-clipboard = vbox-client "Clipboard" "--clipboard";
-  #	};
-  #	virtualisation.virtualbox.guest = {
-  #	  enable = true;
-  #	  x11 = true;
-  #	};
-  #
 
 }
