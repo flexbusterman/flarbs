@@ -97,10 +97,16 @@
 		# 		});
 		# windowManager.dwm.enable = true;
 
-		windowManager.bspwm = {
+		# windowManager.bspwm = {
+		# 	enable = true;
+		# 	configFile = ./dotfiles/bspwm/bspwmrc;
+		# 	sxhkd.configFile = ./dotfiles/sxhkd/sxhkdrc;
+		# };
+
+		windowManager.xmonad = {
 			enable = true;
-			configFile = ./dotfiles/bspwm/bspwmrc;
-			sxhkd.configFile = ./dotfiles/sxhkd/sxhkdrc;
+			enableContribAndExtras = true;
+			config = builtins.readFile ./dotfiles/xmonad/xmonad.hs;
 		};
 
 	};
