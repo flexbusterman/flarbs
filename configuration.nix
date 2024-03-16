@@ -89,13 +89,20 @@
 		xkb.options = "eurosign:e,caps:escape";
 		displayManager.lightdm.enable = true;
 		desktopManager.xfce.enable = true;
-		windowManager.dwm.package = pkgs.dwm.overrideAttrs (oldAttrs: rec {
-				src = builtins.fetchTarball {
-				url = "https://github.com/flexbusterman/dwm/archive/flexmaster.tar.gz";
-				# sha256 = "0azn8xqh9ig6bk639wywqdx8hay9ch6nk62scij7zs2xd22yv8c4";
-				};
-				});
-		windowManager.dwm.enable = true;
+		# windowManager.dwm.package = pkgs.dwm.overrideAttrs (oldAttrs: rec {
+		# 		src = builtins.fetchTarball {
+		# 		url = "https://github.com/flexbusterman/dwm/archive/flexmaster.tar.gz";
+		# 		# sha256 = "0azn8xqh9ig6bk639wywqdx8hay9ch6nk62scij7zs2xd22yv8c4";
+		# 		};
+		# 		});
+		# windowManager.dwm.enable = true;
+
+		windowManager.bspwm = {
+			enable = true;
+			configFile = ./dotfiles/bspwm/bspwmrc;
+			sxhkd.configFile = ./dotfiles/sxhkd/sxhkdrc;
+		};
+
 	};
 
 #  ____             _
@@ -132,6 +139,8 @@
 # |  __/ (_| | (__|   < (_| | (_| |  __/\__ \
 # |_|   \__,_|\___|_|\_\__,_|\__, |\___||___/
 # packages                   |___/
+
+	# tarball-ttl = 1;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -199,12 +208,12 @@
 		(dmenu.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dmenu/archive/master.tar.gz";
 		# sha256="15n6c1baba8mfncbzqzdbmv4116yblfm5kl7xl5mf6vpy40y433r";
 		}; }))
-		(st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/st/archive/flexmaster.tar.gz";
-		# sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
-		}; }))
-		(st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dwmblocks/archive/flex.tar.gz";
-		# sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
-		}; }))
+		# (st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/st/archive/flexmaster.tar.gz";
+		# # sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
+		# }; }))
+		# (st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dwmblocks/archive/flex.tar.gz";
+		# # sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
+		# }; }))
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
