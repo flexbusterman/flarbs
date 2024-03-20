@@ -103,11 +103,11 @@
 		# 	sxhkd.configFile = ./dotfiles/sxhkd/sxhkdrc;
 		# };
 
-		windowManager.xmonad = {
-			enable = true;
-			enableContribAndExtras = true;
-			config = builtins.readFile ./dotfiles/xmonad/xmonad.hs;
-		};
+		# windowManager.xmonad = {
+		# 	enable = true;
+		# 	enableContribAndExtras = true;
+		# 	config = builtins.readFile ./dotfiles/xmonad/xmonad.hs;
+		# };
 
 	};
 
@@ -170,69 +170,108 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-
+		polybarFull
 		bat
-		blueberry
-		bluez
-		btop
-		cargo
-		coreutils
-		du-dust
-		dunst
-		eza
-		fzf
-		gcc
-		git
-		gnumake
-		kitty
-		libnotify
-		neofetch
-    neovim
-		nodejs
-		p7zip
-		pamixer
-		pass
-		pavucontrol
-		pulsemixer
-		python3
-		python311Packages.xlib
-    ranger
-		ripgrep
-		rustc
-		tldr
-    tmux
-		tree
-		unzip
-		vim
-		w3m
-    wget
-		xclip
-		xorg.xkill
-		zplug
-		zsh
-
-		(dmenu.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dmenu/archive/master.tar.gz";
-		# sha256="15n6c1baba8mfncbzqzdbmv4116yblfm5kl7xl5mf6vpy40y433r";
-		}; }))
-		# (st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/st/archive/flexmaster.tar.gz";
-		# # sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
-		# }; }))
-		# (st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dwmblocks/archive/flex.tar.gz";
-		# # sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
-		# }; }))
-  ];
+			blueberry
+			bluez
+			btop
+			cargo
+			coreutils
+			du-dust
+			dunst
+			eza
+			fzf
+			gcc
+			git
+			gnumake
+			kitty
+			libnotify
+			neofetch
+			neovim
+			nodejs
+			p7zip
+			pamixer
+			pass
+			pavucontrol
+			pulsemixer
+			python3
+			python311Packages.xlib
+			ranger
+			ripgrep
+			rustc
+			tldr
+			tmux
+			tree
+			unzip
+			vim
+			w3m
+			wget
+			xclip
+			xorg.xkill
+			zplug
+			zsh
+			# xmobar
+			stalonetray
+			(dmenu.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dmenu/archive/master.tar.gz";
+sha256="15n6c1baba8mfncbzqzdbmv4116yblfm5kl7xl5mf6vpy40y433r";
+														}; }))
+# (st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/st/archive/flexmaster.tar.gz";
+# # sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
+# }; }))
+# (st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dwmblocks/archive/flex.tar.gz";
+# # sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
+# }; }))
+	];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+#  ____                  _
+# / ___|  ___ _ ____   _(_) ___ ___  ___
+# \___ \ / _ \ '__\ \ / / |/ __/ _ \/ __|
+#  ___) |  __/ |   \ V /| | (_|  __/\__ \
+# |____/ \___|_|    \_/ |_|\___\___||___/
+# services
+
+  systemd.user.services.dropbox = {
+    description = "Dropbox";
+    wantedBy = [ "graphical-session.target" ];
+    environment = {
+      QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
+      QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+    };
+    serviceConfig = {
+      ExecStart = "${lib.getBin pkgs.dropbox}/bin/dropbox";
+      ExecReload = "${lib.getBin pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      KillMode = "control-group"; # upstream recommends process
+      Restart = "on-failure";
+      PrivateTmp = true;
+      ProtectSystem = "full";
+      Nice = 10;
+    };
   };
 
-  # List services that you want to enable:
+  # systemd.user.services.xmobar = {
+  #   description = "Xmobar";
+  #   wantedBy = [ "graphical-session.target" ];
+  #   environment = {
+  #   };
+  #   serviceConfig = {
+  #     ExecStart = "${lib.getBin pkgs.dropbox}/bin/xmobar";
+  #     ExecReload = "${lib.getBin pkgs.coreutils}/bin/kill -HUP $MAINPID";
+  #     KillMode = "control-group"; # upstream recommends process
+  #     Restart = "on-failure";
+  #     PrivateTmp = true;
+  #     ProtectSystem = "full";
+  #     Nice = 10;
+  #   };
+  # };
 
-  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   # Open ports in the firewall.
