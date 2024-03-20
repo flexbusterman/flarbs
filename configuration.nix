@@ -134,6 +134,7 @@
     jack.enable = true;
 
     wireplumber.enable = true;
+
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -230,6 +231,8 @@ sha256="15n6c1baba8mfncbzqzdbmv4116yblfm5kl7xl5mf6vpy40y433r";
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+
+boot.blacklistedKernelModules = [ "snd_pcsp" ];
 
 #  ____                  _
 # / ___|  ___ _ ____   _(_) ___ ___  ___
