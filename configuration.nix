@@ -123,9 +123,13 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
+	hardware.bluetooth.enable = true; # enables support for Bluetooth
+	hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+	services.blueman.enable = true;
+
   # Enable sound with pipewire.
   sound.enable = true;
-  hardware.pulseaudio.enable = lib.mkForce false;
+  # hardware.pulseaudio.enable = lib.mkForce false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -171,9 +175,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+		xsel
 		polybarFull
 		bat
-			blueberry
 			bluez
 			btop
 			cargo
@@ -258,6 +262,17 @@ boot.blacklistedKernelModules = [ "snd_pcsp" ];
       Nice = 10;
     };
   };
+
+services.pipewire.wireplumber.configPackages = [
+	(pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
+	 bluez_monitor.properties = {
+	 ["bluez5.enable-sbc-xq"] = true,
+	 ["bluez5.enable-msbc"] = true,
+	 ["bluez5.enable-hw-volume"] = true,
+	 ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+	 }
+	 '')
+];
 
   # systemd.user.services.xmobar = {
   #   description = "Xmobar";
