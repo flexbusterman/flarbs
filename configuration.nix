@@ -8,15 +8,17 @@
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./virtualboxfix.nix
+      # ./virtualboxfix.nix
     ];
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # bootloader
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.device = "/dev/sda";
+  # boot.loader.grub.useOSProber = false;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "T460"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -97,11 +99,11 @@
 		# 		});
 		# windowManager.dwm.enable = true;
 
-		# windowManager.bspwm = {
-		# 	enable = true;
-		# 	configFile = ./dotfiles/bspwm/bspwmrc;
-		# 	sxhkd.configFile = ./dotfiles/sxhkd/sxhkdrc;
-		# };
+		windowManager.bspwm = {
+			enable = true;
+			configFile = ./dotfiles/bspwm/bspwmrc;
+			sxhkd.configFile = ./dotfiles/sxhkd/sxhkdrc;
+		};
 
 		# windowManager.xmonad = {
 		# 	enable = true;
@@ -119,7 +121,7 @@
 # devices
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # services.printing.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -132,9 +134,7 @@
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
     jack.enable = true;
-
     wireplumber.enable = true;
-
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -293,9 +293,9 @@ boot.blacklistedKernelModules = [ "snd_pcsp" ];
 
   #services.xserver.videoDrivers = lib.mkForce [ "vmware" "virtualbox" "modesetting" ];
 
-  virtualisation.virtualbox.guest = {
-    enable = true;
-    x11 = true;
-  };
+  # virtualisation.virtualbox.guest = {
+  #   enable = true;
+  #   x11 = true;
+  # };
 
 }

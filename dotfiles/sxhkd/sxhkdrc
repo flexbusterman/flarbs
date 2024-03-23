@@ -27,7 +27,7 @@ alt + shift + {q,r}
 # restart sxhkd
 # alt + shift + k
 alt + r
-	pkill -usr1 -x sxhkd; notify-send 'sxhkd' 'Reloaded config'
+	pkill -usr1 -x sxhkd && notify-send 'sxhkd' 'Reloaded config'
 
 # close and kill
 alt + {_,shift + }w
@@ -195,25 +195,25 @@ alt + semicolon
 	clipstream
 alt + shift + semicolon
 	clipdownload
-alt + p
-	stack -p
-alt + y
-	stack -y
+# alt + p
+# 	stack -p
+# alt + y
+# 	stack -y
 alt + shift + p
 	passmenu
-alt + Up
-	cpuperformance
-alt + Down
-	cpupowersave
-control + shift + j
+# alt + Up
+# 	cpuperformance
+# alt + Down
+# 	cpupowersave
+alt + control + j
 	musicnext
-control + shift + k
+alt + control + k
 	musicprev
-control + shift + h
+alt + control + h
 	musicseekbackward
-control + shift + l
+alt + control + l
 	musicseekforward
-control + shift + space
+alt + control + space
 	musicplaypause
 alt + shift + i
 	xcalib -i -a
@@ -226,8 +226,9 @@ alt + slash
 	# # //  |_| \___/|___|
 	# # //
 	# # // terminal applications
-alt + shift + comma
-	st -t Vifm -e vifmrun
+alt + comma
+	# st -t Vifm -e vifmrun
+	kitty -e /usr/bin/env ranger
 alt + e
 	st -t NeoMutt -e neomutt
 alt + shift + t
@@ -262,7 +263,7 @@ alt + s
 	# # // gui applications
 alt + q
 	qpwgraph
-alt + shift + period
+alt + period
 	qutebrowser
 alt + shift + control + period
 	bravestart
@@ -270,5 +271,5 @@ alt + shift + x
 	xkill
 alt + shift + F4
 	pavucontrol
-alt + control + Return
-	audacious
+# alt + control + Return
+# 	audacious
