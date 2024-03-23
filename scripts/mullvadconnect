@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+STATUS=$(mullvad status | awk '{print $NF}')
+if [[ $STATUS == "UDP" ]]; then
+    notify-send "Reconnecting Mullvad"
+    mullvad reconnect
+else
+    mullvad connect
+		killall slack
+    sleep 1
+    if [[ $(mullvad status | awk '{print $1}') == "Connected" ]]; then
+        notify-send "Mullvad Connected"
+    fi
+fi

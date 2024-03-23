@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Displays number of unread mail and an loading icon if updating.
+# When clicked, brings up `neomutt`.
+
+# case $BLOCK_BUTTON in
+	# 1) setsid "$TERMINAL" -e neomutt & ;;
+	# 2) setsid mailsync >/dev/null & ;;
+	# 3) notify-send "📬 Mail module" "\- Shows unread mail
+# - Shows 🔃 if syncing mail
+# - Left click opens neomutt
+# - Middle click syncs mail" ;;
+	# 6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+# esac
+
+# unread="$(find "${XDG_DATA_HOME:-$HOME/.local/share}"/mail/*/[Ii][Nn][Bb][Oo][Xx]/new/* -type f | wc -l 2>/dev/null)"
+
+# pidof mbsync >/dev/null 2>&1 && icon="🔃"
+
+# [ "$unread" = "0" ] && [ "$icon" = "" ] || printf "📬$unread$icon"
+
+# case $BLOCK_BUTTON in
+	# 1) setsid "$TERMINAL" -e neomutt & ;;
+	# 2) setsid mailsync >/dev/null & ;;
+	# 3) notify-send "📬 Mail module" "\- Shows unread mail
+# - Shows 🔃 if syncing mail
+# - Left click opens neomutt
+# - Middle click syncs mail" ;;
+	# 6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+# esac
+
+unread1="$(find /home/$USER/.local/share/mail/mail@christianaugustin.com/INBOX/new/ -type f | wc -l 2>/dev/null)"
+[[ $unread1 -ne 0 ]] && color1="^c#00ff00^" || color1="^d^"
+# unread2="$(find "${XDG_DATA_HOME:-$HOME/.local/share}"/mail/chr*/[Ii][Nn][Bb][Oo][Xx]/new/* -type f | wc -l 2>/dev/null)"
+# [[ $unread2 -ne 0 ]] && color2="^c#00ff00^" || color2="^d^"
+# unread3="$(find "${XDG_DATA_HOME:-$HOME/.local/share}"/mail/aug*/[Ii][Nn][Bb][Oo][Xx]/new/* -type f | wc -l 2>/dev/null)"
+# [[ $unread3 -ne 0 ]] && color3="^c#00ff00^" || color3="^d^"
+# only displays if there is unread
+# [ "$unread" = "0" ] || printf " M $unread "
+
+# printf " $color1$unread1^d^ $color2$unread2^d^ $color3$unread3^d^"
+printf " $unread1"

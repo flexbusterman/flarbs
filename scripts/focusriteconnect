@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Extract Focusrite Scarlett 18i20 outputs and Reaper inputs
+focusrite_outputs=$(pw-link -oI | grep 'alsa_input.usb-Focusrite_Scarlett_18i20_USB' | awk '{print $1}')
+reaper_inputs=$(pw-link -iI | grep 'REAPER:in' | awk '{print $1}')
+
+# Check if the extracted values are not empty
+if [ -z "$focusrite_outputs" ] || [ -z "$reaper_inputs" ]; then
+    echo "Could not find Focusrite Scarlett 18i20 outputs or Reaper inputs. Exiting..."
+    exit 1
+fi
+
+# Convert them into arrays
+focusrite_outputs_array=($focusrite_outputs)
+reaper_inputs_array=($reaper_inputs)
+
+# Ensure we have 18 channels to connect from Focusrite to Reaper
+if [ ${#focusrite_outputs_array[@]} -ne 18 ] || [ ${#reaper_inputs_array[@]} -lt 18 ]; then
+    echo "Expected 18 channels from Focusrite Scarlett 18i20 and at least 18 inputs on Reaper. Exiting..."
+    exit 1
+fi
+
+# Link each channel from Focusrite to Reaper
+for i in {0..17}; do
+    focusrite_output_id=${focusrite_outputs_array[$i]}
+    reaper_input_id=${reaper_inputs_array[$i]}
+    pw-link $focusrite_output_id $reaper_input_id
+done
+
+echo "Links created successfully."

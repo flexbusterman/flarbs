@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cd /home/$USER/.wine/drive_c/Program\ Files\ \(x86\)/Roland/SPD-SX\ Wave\ Manager/
+./SPD-SX\ Wave\ Manager.exe

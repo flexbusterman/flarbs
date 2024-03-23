@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+GOVERNOR=$(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor | tail -n 1)
+if [[ $GOVERNOR == "performance" ]]; then
+    notify-send "Performance CPU governor already active"
+else
+    SUDO_ASKPASS=~/.local/bin/dmenupass sudo -A cpupower frequency-set -g performance && notify-send 'Performance CPU governor'
+fi

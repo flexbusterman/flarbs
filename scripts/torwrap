@@ -1,0 +1,12 @@
+#!/bin/sh
+
+ifinstalled tremc-git transmission-cli || exit
+
+! pidof transmission-daemon >/dev/null && transmission-daemon && notify-send "Starting torrent daemon..."
+
+# if $TERMINAL is not set, use xterm
+[ -z "$TERMINAL" ] && TERMINAL=xterm
+# if $TERMINAL is st, use st -e
+[ "$TERMINAL" = "st" ] && TERMINAL="st -e"
+
+$TERMINAL tremc || $TERMINAL tremc || exit 1

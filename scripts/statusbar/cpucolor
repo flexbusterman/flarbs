@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# case $BLOCK_BUTTON in
+# 1) notify-send "🖥 CPU hogs" "$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)\\n(100% per core)" ;;
+# 2) setsid "$TERMINAL" -e htop & ;;
+# 3) notify-send "🖥 CPU module " "\- Shows CPU temperature.
+# - Click to show intensive processes.
+# - Middle click to open htop." ;;
+# 6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+# esac
+# sensors | awk '/Core 0/ {print "🌡" $3}'
+read cpu a b c previdle rest < /proc/stat
+prevtotal=$((a+b+c+previdle))
+sleep 0.5
+read cpu a b c idle rest < /proc/stat
+total=$((a+b+c+idle))
+cpu=$((100*( (total-prevtotal) - (idle-previdle) ) / (total-prevtotal) ))
+# red=$(printf '%02x\n' $(awk "BEGIN{ print 2.55 * $cpu}"))
+greenblue=$(printf '%02x\n' $(awk "BEGIN{ print 2.55 * (100 - $cpu)}"))
+printf "CPU ^c#ff$greenblue$greenblue^$cpu%%^d^"
+# printf "<span foreground=\"#ff79c6\">CPU $cpu%</span>"
+# printf -e "033[31m💻 $cpu%\e[0m"
+#printf -e "$cpu%"printf "BAT %s%s%s%% " "$status" "$warn" "$capacity"

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+st -T fzfvideo -e bash -c '
+	find /home/$USER/Downloads/\!\ VIDEO/ -type f -iregex ".*\.\(mp4\|avi\|mkv\|flv\|mov\|wmv\|webm\)" | fzf > /home/$USER/.towatch
+'
+mpv "$(cat /home/$USER/.towatch)" &
+sleep 0.2
+rm /home/$USER/.towatch

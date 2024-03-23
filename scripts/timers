@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# check if there are any arguments and if all arguments are numbers, else print usage message
+if [ $# -eq 0 ] || ! echo "$@" | egrep -q "^([0-9]*\.?[0-9]+ ?)+$"; then
+    echo "Usage: timers <number> <number> ..."
+    exit 1
+fi
+
+total_timers=$#
+
+# store all arguments as elements in an array
+timers=("$@")
+
+# loop through all timers using index to access each element
+for (( i=0; i<${#timers[@]}; i++ )); do
+    # get the current timer
+    timer=${timers[$i]}
+    # convert minutes to seconds
+    timer=$(echo "$timer * 60" | bc)
+    timer=${timer%.*}
+
+    # start the timer
+    echo "Timer $((i+1)) of $total_timers started."
+    # each second print the remaining time of current timer
+    for (( j=timer; j>0; j-- )); do
+        # clear the screen
+        clear
+        # if total_timers is greater than 1, then set prefix
+        if [ $total_timers -gt 1 ]; then
+            prefix="Timer $((i+1)) of $total_timers: "
+        fi
+
+        minutes=$(($j / 60))
+
+        # if seconds is one digit, then add a zero before it
+        if [ $(($j % 60)) -lt 10 ]; then
+            seconds="0$(($j % 60))"
+        else
+            seconds=$(($j % 60))
+        fi
+
+        # if it's the last minute, send a notification
+        if [ $j -eq 60 ]; then
+            notify-send "Last minute of timer $((i+1))"
+        fi
+
+        echo "$prefix$minutes:$seconds"
+
+        # sleep for one second
+        sleep 1
+    done
+
+    # clear the screen
+    clear
+    echo "Timer $((i+1)) of $total_timers finished."
+    aplay ~/.local/share/$USER/bell02.wav &>/dev/null &
+done
+
+# Play the sound for the end of all timers
+aplay ~/.local/share/$USER/bell01.wav &>/dev/null &
+
+clear
+# if there is more than one timer, then print all timers finished
+# else print timer finished
+if [ $total_timers -gt 1 ]; then
+    echo "All timers finished."
+else
+    echo "Timer finished."
+fi

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Loop through all attached batteries.
+for battery in /sys/class/power_supply/BAT?
+do
+	# Get its remaining capacity and charge status.
+	capacity=$(cat "$battery"/capacity 2>/dev/null) || break
+	status=$(sed "s/[Dd]ischarging/-/;s/[Nn]ot charging//;s/[Cc]harging/+/;s/[Uu]nknown//;s/[Ff]ull//" "$battery"/status)
+
+	# If it is discharging and 25% or less, we will add a ❗ as a warning.
+	 [ "$capacity" -le 25 ] && [ "$status" = "-" ] && warn="!"
+
+	# printf " %s%s%s%% " "$status" "$warn" "$capacity"
+	# printf " %s%s%s%% " "$status" "$warn" "$capacity"
+	unset warn
+done | sed 's/*$//'
+
+# printf " %s%s%s%s " "$charging" "$discharging" "$(bc <<< "($(cat "/sys/class/power_supply/BAT0/capacity" 2>/dev/null) + $(cat "/sys/class/power_supply/BAT1/capacity" 2>/dev/null)) / 2 ")" "%" 
+
+percentage=$(bc <<< "$(cat "/sys/class/power_supply/BAT0/capacity" 2>/dev/null) ")
+dischargegreenblue=$(printf '%02x\n' $(awk "BEGIN{ print 2.55 * $percentage}"))
+ff="ff"
+chargeredblue=$(printf '%02x\n' $(awk "BEGIN{ print 2.55 * (100 - $percentage)}"))
+
+
+	charging=$([[ $(cat "/sys/class/power_supply/BAT0/status" 2>/dev/null) == "Charging" || $(cat "/sys/class/power_supply/BAT1/status" 2>/dev/null) == "Charging" ]] && printf "^c#$chargeredblue$ff$chargeredblue^+" ) 
+	discharging=$([[ $(cat "/sys/class/power_supply/BAT0/status" 2>/dev/null) == "Discharging" || $(cat "/sys/class/power_supply/BAT1/status" 2>/dev/null) == "Discharging" ]] && printf "^c#ff$dischargegreenblue$dischargegreenblue^-" ) 
+
+printf "BAT %s%s%s%s" "$charging" "$discharging" "$percentage" "%^d^" 
+

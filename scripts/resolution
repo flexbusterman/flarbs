@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# 16:9 resolutions
+# targets=("128x72" "256x144" "384x216" "512x288" "640x360" "768x432" "896x504" "1024x576" "1152x648" "1280x720" "1408x792" "1536x864" "1664x936" "1792x1008" "1920x1080" "2048x1152" "2176x1224" "2304x1296" "2432x1368" "2560x1440" "2688x1512" "2816x1584" "2944x1656" "3072x1728" "3200x1800" "3328x1872" "3456x1944" "3584x2016" "3712x2088" "3840x2160")
+
+#!/usr/bin/env bash
+
+# Function to get connected displays
+get_connected_displays() {
+    xrandr | grep " connected" | cut -d ' ' -f1
+}
+
+# Function to get supported resolutions for a display
+get_resolutions() {
+    local display=$1
+    xrandr | grep -A100 "^${display} connected" | grep -Eo '[0-9]+x[0-9]+' | uniq
+}
+
+# Main
+DISPLAYS=$(get_connected_displays)
+
+for display in $DISPLAYS; do
+    echo "Display: $display"
+    # Get resolutions for the display
+    RESOLUTIONS=$(get_resolutions $display)
+
+    # Use dmenu to let the user select a resolution
+    SELECTED_RESOLUTION=$(echo "$RESOLUTIONS" | dmenu -i -p "Select resolution for $display:")
+
+    # Check if a resolution was selected
+    if [ -n "$SELECTED_RESOLUTION" ]; then
+        # Set the selected resolution
+        xrandr --output $display --mode $SELECTED_RESOLUTION
+        echo "Resolution for $display set to $SELECTED_RESOLUTION"
+    else
+        echo "No resolution selected for $display."
+    fi
+done

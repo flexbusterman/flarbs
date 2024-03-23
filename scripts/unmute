@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+for id in $(pactl list sinks | grep "Sink #" | sed 's/Sink #//g'); do
+	pactl set-sink-mute $id 0
+done
+
+amixer -c 1 set Master unmute
+amixer -c 1 set Speaker unmute
+
+sleep 5
+
+pactl list sinks | grep "Mute: yes" && /home/$USER/.local/bin/unmute

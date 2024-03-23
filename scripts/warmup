@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+start=20
+target=$1
+diff=$((target - start))
+increment=$((diff/4))
+echo "5x$start"
+echo "5x$start"
+echo "5x$((start+increment))"
+echo "3x$((start+increment*2))"
+echo "2x$((start+increment*3))"
+echo "1x$((start+increment*3+increment/2))"

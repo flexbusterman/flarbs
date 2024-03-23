@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Use lame to convert argument to mp3 using multithreading
+
+for file in "$@"; do
+	lame -b 320 -q 0 --cbr "$file" "${file%.wav}.mp3" &
+done

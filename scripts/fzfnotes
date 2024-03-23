@@ -1,0 +1,10 @@
+#!/bin/sh
+cd ~/Dropbox/NOTES/
+# nvim "$(fzf)"
+file="$(fzf)"
+if [[ $file ]]; then
+	nvim "$file"
+ else
+   # notify-send "nothing selected, exiting"
+   exit 1;
+fi

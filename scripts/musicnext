@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# ps -C spotify >/dev/null && spotifycli --next || deadbeef --next
+# pgrep deadbeef && deadbeef --next || playerctl -a next
+playerctl -a next && notify-send "$(playerctl metadata)" || mpc --host ~/.mpd/socket next && notify-send "$(mpc --host ~/.mpd/socket current)"

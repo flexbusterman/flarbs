@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# cd ~/Dropbox/SUPERCOLLIDER/;
+# nvim -c "edit $(command ls -ltr ~/Dropbox/SUPERCOLLIDER/ | grep -Ev ^d | awk '/20[0-9]{2}/{print}' | tail -n 1 | sed 's/^[^:]*:[^ ]* //g')" \
+# -c "vsplit ~/Dropbox/SUPERCOLLIDER/synths.scd" \
+# -c "wincmd l" \
+# -c "split ~/Dropbox/SUPERCOLLIDER/startup.scd" \
+# -c "set filetype=supercollider" \
+# -c "SCNvimStart" \
+# -c "wincmd h" \
+# -c "sleep 1" \
+# -c "wincmd ="
+
+cd ~/Dropbox/SUPERCOLLIDER/;
+most_recent_file=$(ls -ltr ~/Dropbox/SUPERCOLLIDER/ | grep -Ev ^d | awk '/20[0-9]{2}/{print}' | tail -n 1 | sed 's/^[^:]*:[^ ]* //g')
+
+ln -sf ~/Dropbox/SUPERCOLLIDER/fieldsteel\ startup.scd ~/.config/SuperCollider/startup.scd
+
+nvim -c "edit $most_recent_file" \
+-c "vsplit ~/Dropbox/SUPERCOLLIDER/flextensions.sc" \
+-c "wincmd h" \
+-c "wincmd =" \
+-c "set filetype=supercollider" \
+-c "SCNvimStart"

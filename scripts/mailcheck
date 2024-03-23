@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+STATUS=$(mullvad status | awk '{print $NF}')
+if [[ $STATUS == "Connected" ]]; then
+    echo "Mullvad connected, not checking mail."
+    # notify-send "Mullvad connected, not checking mail."
+    exit 1
+else
+    echo "Checking mail"
+    # DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus /usr/bin/notify-send "Checking mail"
+    mailsync
+fi

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+quakespasm -basedir /home/$USER/Dropbox/QUAKE/

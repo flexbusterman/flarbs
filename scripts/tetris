@@ -1,0 +1,2 @@
+#!/bin/sh
+nestopia -f ~/Dropbox/ROMS/NES/Tetris.nes

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+searchdirectory="$HOME/Downloads/"
+# ifinstalled xsel webtorrent mpv || exit 1
+clipboard=$(xsel -ob)
+
+if [ -n "$clipboard" ]
+then
+	if [[ "$clipboard" = *"magnet:?"* ]] || [[ "$clipboard" = *".torrent"* ]]; then
+		choice=$(webtorrent --mpv $clipboard --select | awk '/^[0-9]/' | dmenu -i -l 40 -p "Index:" )
+		index=$(echo $choice | sed -e "s/ .*//g")
+		webtorrent --mpv $clipboard --select $index
+	elif [[ "$clipboard" = *"https"* ]]; then
+		# notify-send "Let's attempt to stream with mpv"
+		# strips duplicate time values
+		clipboard=$(echo $clipboard | sed 's/&[^&]*//')
+		# mpv --ytdl-raw-options=netrc=,mark-watched= "$clipboard"
+		mpv --ytdl-raw-options=mark-watched=,username=oauth2,password="$YT_KEY" "$clipboard"
+	else
+		# notify-send "not youtube"
+		# strips time and path info
+		clipboard=$(echo $clipboard | sed 's/&t=.*$//' | sed 's/\..*\///')
+		escaped=$(echo $clipboard | sed -e 's/[]\/$*.^[]/\\&/g')
+		cd $searchdirectory
+		searchresult=$(find . -name "$escaped")
+		subdir=$(echo $searchresult | sed 's#[^/]*$##')
+		filename=$(echo $searchresult | sed 's/.*\///')
+		cd $subdir
+		mpv "$filename"
+		# mpv "$(find . -name "$escaped")" || notify-send 'Clipboard not valid'
+	fi
+else
+	notify-send 'Clipboard empty'
+fi

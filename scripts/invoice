@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+cd /home/$USER/.local/src/invoice/
+st -e nvim /home/$USER/.local/src/invoice/invoicerc
+/home/$USER/.local/src/invoice/invoice

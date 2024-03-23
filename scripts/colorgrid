@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# ... [your color definitions and helper functions here]
+
+# Escape codes
+ESC_SEQ="\033["
+COL_RESET=$ESC_SEQ"0m"
+FG=$ESC_SEQ"38;5;"
+BG=$ESC_SEQ"48;5;"
+
+# [the rest of your color definitions...]
+
+function colorhelp() {
+    # ... [contents of the colorhelp function]
+    echo -e "\nTo write colored text, either begin with ${RED}\${ESC_SEQ}${COL_RESET} (${MAGENTA}\\\033[${COL_RESET}) and"
+    echo -e "add a color code from ${MAGENTA}colorgrid()${COL_RESET}, "
+    echo -e "or begin with ${RED}\${(RED|GREEN|YELLOW|BLUE|MAGENTA|CYAN)}${COL_RESET}."
+    echo -e "Close the text with $RED\${COL_RESET}${COL_RESET} (${MAGENTA}\\\033[0m${COL_RESET})"
+    echo -en "\nExample:\n${YELLOW}echo $RED-e $YELLOW\"$RED"
+    echo -en "Look: ${MAGENTA}\${ESC_SEQ}${BLUE}38;5;243m${RED}This is dark grey text${MAGENTA}\${COL_RESET}${RED} and this is normal text."
+    echo -e "$YELLOW\"$COL_RESET"
+    echo -e "Look: ${ESC_SEQ}38;5;243mThis is dark gray text${COL_RESET} and this is normal text.\n"
+}
+
+function colorgrid() {
+    # ... [contents of the colorgrid function]
+    iter=16
+    while [ $iter -lt 52 ]; do
+        second=$[$iter+36]
+        third=$[$second+36]
+        four=$[$third+36]
+        five=$[$four+36]
+        six=$[$five+36]
+        seven=$[$six+36]
+        if [ $seven -gt 250 ];then seven=$[$seven-251]; fi
+
+        echo -en "\033[38;5;$(echo $iter)m█ "
+        printf "%03d" $iter
+        echo -en "   \033[38;5;$(echo $second)m█ "
+        printf "%03d" $second
+        echo -en "   \033[38;5;$(echo $third)m█ "
+        printf "%03d" $third
+        echo -en "   \033[38;5;$(echo $four)m█ "
+        printf "%03d" $four
+        echo -en "   \033[38;5;$(echo $five)m█ "
+        printf "%03d" $five
+        echo -en "   \033[38;5;$(echo $six)m█ "
+        printf "%03d" $six
+        echo -en "   \033[38;5;$(echo $seven)m█ "
+        printf "%03d" $seven
+
+        iter=$[$iter+1]
+        printf '\r\n'
+    done
+    echo -e "$COL_RESET"
+    echo "Example for color 153:"
+    echo -e "echo -e \"\033[38;5;153m\\\033[38;5;153mHello World\\\033[0m\033[0m\""
+    colorhelp
+}
+
+colorgrid

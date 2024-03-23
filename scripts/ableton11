@@ -1,0 +1,2 @@
+#!/bin/sh
+cd /home/$USER/.wine/drive_c/ProgramData/Ableton/Live\ 11\ Suite/Program/ && wine start Ableton\ Live\ 11\ Suite.exe &

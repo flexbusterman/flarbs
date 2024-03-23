@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# ... [your color definitions and helper functions here]
+
+# Escape codes
+ESC_SEQ="\033["
+COL_RESET=$ESC_SEQ"0m"
+FG=$ESC_SEQ"38;5;"
+BG=$ESC_SEQ"48;5;"
+
+# [the rest of your color definitions...]
+
+function printcolor() {
+    # ... [contents of the printcolor function]
+    local FG=$1
+    local BG=$2
+
+    fg=`eval echo "\$\{$FG\}"`
+    bg=`eval echo "\$\{BG_$BG\}"`
+    eval echo -en "$fg$bg"
+
+    printf ' $%-17s' $FG;
+    echo -en "${COL_RESET}"
+}
+
+function colornames() {
+    # ... [contents of the colornames function]
+    local colors=(BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE)
+    local lowup=()
+    lowup[0]="_"
+    lowup[1]="_BRIGHT_"
+
+    local fgcolor bgcolor
+    echo "List of color variables. "
+    #table
+    for bgbright in ${lowup[@]}
+    do
+        # echo "writing ${bgbright:1} bg colors"
+        #column header
+        for bg in ${colors[@]}
+        do
+            # echo -en "\$$bg\t"
+            printf ' $BG_%-14s' ${bgbright:1}$bg;
+        done
+
+        # line feed:
+        echo ""
+
+        for fgbright in ${lowup[@]}
+        do
+
+            #echo "writing ${fgbright:1} fg colors"
+            for fg in ${colors[@]}
+            do
+                fgcolor=${fgbright:1}$fg
+
+                for bg in ${colors[@]}
+                do
+                    bgcolor=${bgbright:1}$bg
+                    printcolor $fgcolor $bgcolor
+                done
+
+                # line feed:
+                echo ""
+            done
+        done
+        echo ""
+    done
+}
+
+colornames

@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+# Define keybindings and their descriptions
+declare -A keybindings=(
+  ["Alt+Shift+R"]="Rebuild dwm"
+  ["Alt+Shift+="]="Run calculator"
+  ["Alt+Shift+Control+L"]="Lock screen with slock"
+  ["Alt+D"]="Type the current date"
+  ["Alt+B"]="Connect to Bluetooth headphones"
+  ["Alt+Shift+B"]="Disconnect Bluetooth headphones"
+  ["Alt+Shift+Control+B"]="Open Bluetooth settings with blueberry"
+  ["Alt+F"]="Toggle fullscreen mode"
+  ["Super+Print"]="Take a screenshot with maim"
+  ["Shift+Print"]="Take a selective screenshot with maim"
+  ["Alt+Shift+\`"]="Open dmenu for unicode characters"
+  ["Alt+M"]="Connect with Mullvad VPN"
+  ["Alt+Shift+M"]="Disconnect Mullvad VPN"
+  ["Alt+Shift+Control+M"]="Sync mail"
+  ["Alt+F1"]="Open Arch Linux wiki in default browser"
+  ["Alt+F2"]="Change screen resolution"
+  ["Alt+F3"]="Reset display to default"
+  ["Alt+Shift+F3"]="Select display configuration"
+  ["Alt+F7"]="Toggle todo list display"
+  ["Alt+F8"]="Mount devices"
+  ["Alt+F9"]="Unmount devices"
+  ["Alt+F10"]="Preview camera output"
+  ["Alt+F11"]="Start screen recording"
+  ["Alt+F12"]="Kill screen recording"
+  ["Super+XF86AudioMute"]="Toggle mute"
+  ["Super+XF86AudioRaiseVolume"]="Increase volume"
+  ["Super+XF86AudioLowerVolume"]="Decrease volume"
+  ["Super+XF86AudioMicMute"]="Toggle microphone mute"
+  ["Super+XF86MonBrightnessUp"]="Increase screen brightness"
+  ["Super+XF86MonBrightnessDown"]="Decrease screen brightness"
+  ["Alt+Shift+Control+R"]="Reboot system"
+  ["Alt+Shift+Control+P"]="Power off system"
+  ["Alt+;"]="Stream clipboard video link"
+  ["Alt+Shift+;"]="Download clipboard video link"
+  ["Alt+Shift+Control+;"]="Download clipboard video link as mp3"
+  ["Alt+P"]="Paste to clipboard stack"
+	["Alt+Y"]="Yank (copy) from clipboard stack"
+  ["Alt+Shift+P"]="Password manager"
+  ["Alt+Control+J"]="Play next music track"
+  ["Alt+Control+K"]="Play previous music track"
+  ["Alt+Control+H"]="Seek backward in music track"
+  ["Alt+Control+L"]="Seek forward in music track"
+  ["Alt+Control+Space"]="Play/pause music"
+  ["Alt+Shift+I"]="Invert screen colors"
+  ["Alt+Shift+/"]="Open vim with fzf"
+  ["Alt+/"]="Show custom shortcuts"
+  ["Alt+O"]="Open video file with fzf"
+  ["Alt+Shift+O"]="Search and play YouTube videos with ytfzf"
+  ["Alt+Shift+Control+M"]="Toggle touchpad"
+  ["Alt+Shift+Control+1"]="Set a timer for 60 minutes"
+  ["Alt+Shift+Control+2"]="Set a timer for 30 minutes"
+  ["Alt+Shift+Control+3"]="Set a timer for 20 minutes"
+  ["Alt+Shift+Control+4"]="Set a timer for 15 minutes"
+  ["Alt+Shift+Control+0"]="Kill all active timers"
+  ["Alt+C"]="Connect to Reaper"
+  ["Alt+Control+D"]="Clear the current mpd playlist"
+)
+
+# Prepare the list for dmenu
+keybindings_list=""
+for key in "${!keybindings[@]}"; do
+  keybindings_list+="$key -- ${keybindings[$key]}\n"
+done
+
+# Pipe the list into dmenu
+selected=$(echo -e "$keybindings_list" | dmenu -i -l 20 -p "Keys:")
+
+# Display the selected keybinding (optional)
+# notify-send "Selected Keybinding" "$selected"

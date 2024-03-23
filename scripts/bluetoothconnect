@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+DEVICE="${1:?Missing MAC address as argument}"
+CONNECTED=$(bluetoothctl devices | cut -f2 -d' ' | while read uuid; do bluetoothctl info $uuid; done|grep -e "Connected" | awk '{print $NF}')
+echo $CONNECTED
+POWERED=$(bluetoothctl show | grep -i powered | grep -i yes)
+
+if [[ $POWERED ]]; then
+    if [[ $CONNECTED == yes ]]; then
+        echo "Restarting bluetooth service"
+        SUDO_ASKPASS=~/.local/bin/dmenupass sudo -A systemctl restart bluetooth.service && bluetoothctl power on && bluetoothctl -- connect $1
+    else
+        echo "Bluetooth powered but not connected"
+        bluetoothctl -- connect $1
+    fi
+    sleep 1
+		MAC=$(echo $1 | tr ":" "_")
+    pactl set-card-profile bluez_card.$MAC a2dp-sink
+		/home/$USER/.local/bin/unmute
+else
+    echo "Bluetooth not powered"
+    bluetoothctl power on && bluetoothctl -- connect $1
+fi

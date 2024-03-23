@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+DEVICE=$(xinput --list | grep -o "SynPS/2 Synaptics TouchPad\|Synaptics TM3288-011")
+if [[ $DEVICE ]]; then
+	ENABLED=$(xinput --list-props "$DEVICE" | grep "Device Enabled" | awk '{print $NF}')
+	if [[ $ENABLED == 1 ]]; then
+		echo "Device is already enabled"
+	else
+		echo "Enabling TouchPad"
+		xinput enable "$DEVICE"
+		xinput set-prop "$DEVICE" "libinput Tapping Enabled" 1
+		xinput set-prop "$DEVICE" "libinput Accel Speed" +0.2
+	fi
+else
+	echo "No suitable device found"
+fi

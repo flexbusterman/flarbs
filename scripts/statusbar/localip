@@ -1,0 +1,2 @@
+#!/bin/sh
+printf "$(ip -h address | grep inet | awk 'NR==3{print $2}' | sed 's/\/24//')"

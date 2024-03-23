@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+THEME_FILES=($@)
+INDEX=0
+
+while [ $INDEX -lt ${#THEME_FILES[@]} ]; do
+    THEME_FILE=${THEME_FILES[$INDEX]}
+    clear
+
+    # Extracting and displaying the theme name
+    THEME_NAME=$(grep '^scheme:' "$THEME_FILE" | cut -d '"' -f2)
+    echo "-- Theme: $THEME_NAME"
+
+    # Initialize variable to hold theme data with leading --
+    THEME_DATA="-- Theme: $THEME_NAME\n"
+
+    # Processing the colors and adding them to THEME_DATA
+    while IFS= read -r line; do
+        # Skip lines that are not color definitions
+        if ! [[ $line =~ ^base[0-9A-Fa-f]{2}: ]]; then
+            continue
+        fi
+
+        # Extracting the color code, ignoring comments and ensuring it's a valid hex
+        COLOR_CODE=$(echo $line | awk -F '"' '{print $2}' | awk '{print $1}')
+        # Check if COLOR_CODE is a valid hex color
+        if ! [[ $COLOR_CODE =~ ^[0-9a-fA-F]{6}$ ]]; then
+            echo "Invalid color code in $line"
+            continue
+        fi
+        COLOR_NAME=$(echo $line | cut -d ':' -f1)
+        R=$(echo $COLOR_CODE | cut -c1-2)
+        G=$(echo $COLOR_CODE | cut -c3-4)
+        B=$(echo $COLOR_CODE | cut -c5-6)
+        R_DEC=$((16#$R))
+        G_DEC=$((16#$G))
+        B_DEC=$((16#$B))
+        LINE="${COLOR_NAME} = \"#$COLOR_CODE\",\n"
+        printf "\033[48;2;${R_DEC};${G_DEC};${B_DEC}m$LINE\033[0m"
+        THEME_DATA+="$LINE"
+    done < <(grep 'base' "$THEME_FILE")
+
+    # User input for navigation
+    while true; do
+        read -n1 -p "Press 'j' for next, 'k' for previous, 'y' to yank, 'q' to quit: " KEY
+        echo ""
+
+        case $KEY in
+            j)
+                ((INDEX++))
+                break
+                ;;
+            k)
+                ((INDEX--))
+                if [ $INDEX -lt 0 ]; then INDEX=0; fi
+                break
+                ;;
+            y)
+                printf "%b" "$THEME_DATA" | xclip -sel clip
+                echo "Theme data yanked to clipboard."
+                ;;
+            q)
+                exit 0
+                ;;
+            *)
+                echo "Invalid key. Please use 'j', 'k', 'y', or 'q'."
+                ;;
+        esac
+    done
+
+    if [ $INDEX -ge ${#THEME_FILES[@]} ]; then
+        INDEX=0
+    fi
+done

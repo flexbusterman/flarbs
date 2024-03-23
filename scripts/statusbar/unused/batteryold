@@ -1,0 +1,83 @@
+#!/bin/sh
+
+# Prints all batteries, their percentage remaining and an emoji corresponding
+# to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
+
+# case $BLOCK_BUTTON in
+	# 3) notify-send "🔋 Battery module" "🔋: discharging
+# 🛑: not charging
+# ♻: stagnant charge
+# 🔌: charging
+# ⚡: charged
+# ❗: battery very low!" ;;
+	# 6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+# esac
+
+# acpi alternative
+# acpi | sed "s/Battery [0-9]: //;s/[Dd]ischarging, /🔋/;s/[Nn]ot charging, /🛑/;s/[Cc]harging, /🔌/;s/[Uu]nknown, /♻️/;s/[Ff]ull, /⚡/;s/ \(remaining\|until charged\)//"; exit
+
+# Loop through all attached batteries.
+# for battery in /sys/class/power_supply/BAT?
+# for battery in /sys/class/power_supply/BAT1
+# do
+	# # Get its remaining capacity and charge status.
+	# capacity=$(cat "$battery"/capacity) || break
+	# status=$(sed "s/[Dd]ischarging/-/;s/[Nn]ot charging/E /;s/[Cc]harging/+/;s/[Uu]nknown/N /;s/[Ff]ull/F /" "$battery"/status)
+
+	# # If it is discharging and 25% or less, we will add a ❗ as a warning.
+	 # [ "$capacity" -le 25 ] && [ "$status" = "-" ] && warn="!"
+
+	# printf " BAT %s%s%s%%" "$status" "$warn" "$capacity"
+	# unset warn
+# done | sed 's/*$//'
+# printf " "
+
+#     ____   ___ ____   ___         ___   ___       ____   ___
+#    |___ \ / _ \___ \ / _ \       / _ \ ( _ )     |___ \ / _ \
+#      __) | | | |__) | | | |_____| | | |/ _ \ _____ __) | (_) |
+#     / __/| |_| / __/| |_| |_____| |_| | (_) |_____/ __/ \__, |
+#    |_____|\___/_____|\___/       \___/ \___/     |_____|  /_/
+#!/bin/sh
+
+# Prints all batteries, their percentage remaining and an emoji corresponding
+# to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
+
+case $BLOCK_BUTTON in
+	3) notify-send "🔋 Battery module" "🔋: discharging
+🛑: not charging
+♻: stagnant charge
+🔌: charging
+⚡: charged
+❗: battery very low!
+- Scroll to change adjust xbacklight." ;;
+	4) xbacklight -inc 10 ;;
+	5) xbacklight -dec 10 ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+# acpi alternative
+# acpi | sed "s/Battery [0-9]: //;s/[Dd]ischarging, /🔋/;s/[Nn]ot charging, /🛑/;s/[Cc]harging, /🔌/;s/[Uu]nknown, /♻️/;s/[Ff]ull, /⚡/;s/ \(remaining\|until charged\)//"; exit
+
+# Loop through all attached batteries.
+for battery in /sys/class/power_supply/BAT?
+do
+	# Get its remaining capacity and charge status.
+	capacity=$(cat "$battery"/capacity 2>/dev/null) || break
+	status=$(sed "s/[Dd]ischarging/-/;s/[Nn]ot charging//;s/[Cc]harging/+/;s/[Uu]nknown//;s/[Ff]ull//" "$battery"/status)
+
+	# If it is discharging and 25% or less, we will add a ❗ as a warning.
+	 [ "$capacity" -le 25 ] && [ "$status" = "-" ] && warn="!"
+
+	# printf " %s%s%s%% " "$status" "$warn" "$capacity"
+	# printf " %s%s%s%% " "$status" "$warn" "$capacity"
+	unset warn
+done | sed 's/*$//'
+
+	# printf "%s" "$(cat "/sys/class/power_supply/BAT0/capacity" 2>/dev/null)"
+
+
+	charging=$([[ $(cat "/sys/class/power_supply/BAT0/status" 2>/dev/null) == "Charging" || $(cat "/sys/class/power_supply/BAT1/status" 2>/dev/null) == "Charging" ]] && echo "+" ) 
+	discharging=$([[ $(cat "/sys/class/power_supply/BAT0/status" 2>/dev/null) == "Discharging" || $(cat "/sys/class/power_supply/BAT1/status" 2>/dev/null) == "Discharging" ]] && echo "-" ) 
+# printf " %s%s%s%s " "$charging" "$discharging" "$(bc <<< "($(cat "/sys/class/power_supply/BAT0/capacity" 2>/dev/null) + $(cat "/sys/class/power_supply/BAT1/capacity" 2>/dev/null)) / 2 ")" "%" 
+printf "BAT %s%s%s%s" "$charging" "$discharging" "$(bc <<< "$(cat "/sys/class/power_supply/BAT0/capacity" 2>/dev/null) ")" "%" 
+

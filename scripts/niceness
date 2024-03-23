@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#
+# pipewire to -20
+for pid in $(pgrep pipewire); do
+    SUDO_ASKPASS=~/.local/bin/dmenupass sudo -A renice -n -20 -p $pid
+done
+
+# pipewire to -20
+for pid in $(pgrep scsynth); do
+    SUDO_ASKPASS=~/.local/bin/dmenupass sudo -A renice -n -20 -p $pid
+done

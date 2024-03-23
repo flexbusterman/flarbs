@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# FILE=${FILE:-"$(date +%F).tidal"}
+cd ~/Dropbox/FOXDOT/
+# FILE=$(command ls -ltr ~/Dropbox/TIDAL\ CYCLES/ | grep -Ev ^d | awk '/20[0-9]{2}/{print}' | tail -n 1 | sed 's/^[^:]*:[^ ]* //g')
+# FILE=$(ls -ltr ~/Dropbox/TIDAL\ CYCLES/ | grep -Ev '^d' | awk '/20[0-9]{2}/{print $NF}' | tail -n 1)
+FILE=$(command ls -tr ~/Dropbox/FOXDOT/ | grep -Ev ^d | awk '/20[0-9]{2}/{print}' | tail -n 1)
+args=${@:-$FILE}
+
+ln -sf ~/Dropbox/SUPERCOLLIDER/foxdot\ startup.scd ~/.config/SuperCollider/startup.scd
+
+# Check if the session "tidal" exists
+if ! tmux has-session -t foxdot 2>/dev/null; then
+    echo "tmux doesn't have session foxdot"
+
+    # Create session and panes
+    tmux new-session -d -s foxdot
+    echo "starting session"
+    tmux split-window -h -t foxdot
+    tmux split-window -v -t foxdot
+
+    # Send commands to panes
+    tmux send-keys -t 2 "clear && sclang" C-m
+
+		sleep 10
+
+    tmux send-keys -t 0 "nvim -c ':FoxDotStart' \"$args\"" C-m
+    tmux send-keys -t 1 "clear && python ~/.local/src/foxdot.vim/bin/foxdot_cli.py" C-m
+    tmux select-pane -t 0
+    tmux resize-pane -R 15
+else
+    echo "tmux session exists"
+fi
+
+# Attach to the session
+tmux attach-session -t foxdot

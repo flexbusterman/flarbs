@@ -1,0 +1,9 @@
+#!/bin/sh
+primary=$(xrandr -q | grep -w connected | awk '/^[eDP]/ {print $1}')
+secondary=$(xrandr -q | grep -w connected | awk '/^[^eDP]/ {print $1}')
+xrandr --output eDP1 --auto --scale 1.0x1.0 --output $secondary --above $primary --auto --scale 1.0x1.0
+
+setbg
+remaps
+killall dunst
+setsid -f dunst

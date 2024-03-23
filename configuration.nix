@@ -89,6 +89,9 @@
 		enable = true;
 		xkb.layout = "us";
 		xkb.options = "eurosign:e,caps:escape";
+		autoRepeatDelay = 300;
+		autoRepeatInterval = 50;
+
 		displayManager.lightdm.enable = true;
 		desktopManager.xfce.enable = true;
 		# windowManager.dwm.package = pkgs.dwm.overrideAttrs (oldAttrs: rec {

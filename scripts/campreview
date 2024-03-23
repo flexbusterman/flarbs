@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+declare -A device_info
+declare -a options
+
+echo "Scanning for connected video devices..."
+
+# List all video devices and their associated device files, then filter to get device files
+device_files=$(v4l2-ctl --list-devices | grep -oP '/dev/video\d+')
+
+# Iterate over each device file
+while read -r device; do
+    # Extract the device name and remove extra characters
+    device_name=$(v4l2-ctl --list-devices | grep -B1 "$device" | head -n1 | sed 's/:\s.*//')
+
+    highest_fps=0
+    highest_res=""
+
+    # Parse formats, resolutions, and frame rates
+    while IFS= read -r line; do
+        if [[ $line =~ Size:\ Discrete\ ([0-9]+x[0-9]+) ]]; then
+            current_res=${BASH_REMATCH[1]}
+        elif [[ $line =~ Interval:\ Discrete\ ([0-9.]+)s\ \(([0-9.]+)\ fps\) ]]; then
+            current_fps=${BASH_REMATCH[2]}
+            if (( $(echo "$current_fps > $highest_fps" | bc -l) )); then
+                highest_fps=$current_fps
+                highest_res=$current_res
+            fi
+        fi
+    done < <(v4l2-ctl --device="$device" --list-formats-ext)
+
+    if (( $(echo "$highest_fps > 0" | bc -l) )); then
+        option="$device_name - $device - $highest_res @ $highest_fps fps"
+        device_info["$option"]="$device"
+        options+=("$option")
+    fi
+done <<< "$device_files"
+
+selected_device=""
+num_devices=${#options[@]}
+
+# Let the user choose a device if there are multiple valid entries, otherwise automatically select the single valid entry
+if [ "$num_devices" -gt 1 ]; then
+    selected=$(printf '%s\n' "${options[@]}" | dmenu -i -p "Select a device: ")
+    selected_device=${device_info["$selected"]}
+elif [ "$num_devices" -eq 1 ]; then
+    selected_device=${device_info["${options[0]}"]}
+fi
+
+if [ -n "$selected_device" ]; then
+    # Using ffplay to display the video input from the selected device
+    ffplay -f v4l2 -i "$selected_device" -window_title "Camera Preview" &
+else
+    echo "No valid video devices found."
+fi

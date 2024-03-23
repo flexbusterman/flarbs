@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+xdotool keydown w mousedown 1

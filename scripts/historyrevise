@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+input_file="$1"
+output_file="$1.processed"
+
+tac "$input_file" |
+awk -F';' '{
+    if (!seen[$2]++) {
+        print $2
+    }
+}' | tac |
+awk 'BEGIN {counter = 1} {print ": " counter ":0;" $0; counter++}' > "$output_file"
+
+# After verifying the output, you can uncomment the following line to overwrite the original file.
+mv "$output_file" "$input_file"

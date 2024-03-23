@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# if audacious is running, send play/pause command
+if pgrep -x "audacious" > /dev/null
+then
+	audacious -t
+	exit
+# else if tidal is running and status is playing, send pause command
+elif pgrep -x "tidal-hifi" > /dev/null
+then
+	if playerctl status | grep -q "Playing"
+	then
+		playerctl pause
+		exit
+	else
+		playerctl play
+		exit
+	fi
+# else send play/pause command to mpc
+else
+	mpc --host ~/.mpd/socket toggle
+	exit
+fi
