@@ -66,7 +66,12 @@
 #   |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|_|
 # terminal tty
 
-	programs.zsh.enable = true;
+	programs.zsh = {
+		enable = true;
+		enableCompletion = true;
+		autosuggestions.enable = true;
+	};
+
 	programs.neovim.defaultEditor = true;
 	users.defaultUserShell = pkgs.zsh;
 	environment.localBinInPath = true;
@@ -109,6 +114,10 @@
 		};
 
 		windowManager.spectrwm = {
+			enable = true;
+		};
+
+		windowManager.awesome = {
 			enable = true;
 		};
 
@@ -198,6 +207,9 @@
 # system packages
 	environment.systemPackages = with pkgs; [
 
+		alacritty
+		acpi
+		sysstat
 		xlockmore
 		bat
 		bluez
