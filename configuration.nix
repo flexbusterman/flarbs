@@ -13,6 +13,10 @@
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  environment.sessionVariables = rec {
+    HEADPHONES = "50:C2:75:29:C7:6E";
+	};
+
   # bootloader
   # boot.loader.grub.enable = true;
   # boot.loader.grub.device = "/dev/sda";
@@ -91,7 +95,6 @@
 		xkb.options = "eurosign:e,caps:escape";
 		autoRepeatDelay = 300;
 		autoRepeatInterval = 50;
-
 		displayManager.lightdm.enable = true;
 		desktopManager.xfce.enable = true;
 		# windowManager.dwm.package = pkgs.dwm.overrideAttrs (oldAttrs: rec {
@@ -101,18 +104,16 @@
 		# 		};
 		# 		});
 		# windowManager.dwm.enable = true;
-
 		windowManager.bspwm = {
 			enable = true;
 		};
-
 		# windowManager.xmonad = {
 		# 	enable = true;
 		# 	enableContribAndExtras = true;
 		# 	config = builtins.readFile ./dotfiles/xmonad/xmonad.hs;
 		# };
-
 	};
+	services.picom.enable = true;
 
 #  ____             _
 # |  _ \  _____   _(_) ___ ___  ___
@@ -163,63 +164,69 @@
 		description = "flex";
 		extraGroups = [ "networkmanager" "wheel" ];
 		packages = with pkgs; [
+
 			dropbox
 			mpv
 			qutebrowser
 			reaper
 			slack
 			yt-dlp
+
 		];
 
 	};
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-		xsel
-		polybarFull
+# List packages installed in system profile. To search, run:
+# $ nix search wget
+	environment.systemPackages = with pkgs; [
+
 		bat
-			bluez
-			btop
-			cargo
-			coreutils
-			du-dust
-			dunst
-			eza
-			fzf
-			gcc
-			git
-			gnumake
-			kitty
-			libnotify
-			neofetch
-			neovim
-			nodejs
-			p7zip
-			pamixer
-			pass
-			pavucontrol
-			pulsemixer
-			python3
-			python311Packages.xlib
-			ranger
-			ripgrep
-			rustc
-			tldr
-			tmux
-			tree
-			unzip
-			vim
-			w3m
-			wget
-			xclip
-			xorg.xkill
-			zplug
-			zsh
-			# xmobar
-			stalonetray
+		bluez
+		btop
+		cargo
+		coreutils
+		du-dust
+		dunst
+		eza
+		feh
+		figlet
+		fzf
+		gcc
+		git
+		gnumake
+		killall
+		kitty
+		libnotify
+		neofetch
+		neovim
+		nodejs
+		p7zip
+		pamixer
+		pass
+		pavucontrol
+		polybarFull
+		pulsemixer
+		python3
+		python311Packages.xlib
+		ranger
+		ripgrep
+		rustc
+		stalonetray
+		tldr
+		tmux
+		tree
+		unzip
+		vim
+		w3m
+		wget
+		xclip
+		xorg.xkill
+		xsel
+		zplug
+		zsh
+
 			(dmenu.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dmenu/archive/master.tar.gz";
-sha256="15n6c1baba8mfncbzqzdbmv4116yblfm5kl7xl5mf6vpy40y433r";
+														sha256="15n6c1baba8mfncbzqzdbmv4116yblfm5kl7xl5mf6vpy40y433r";
 														}; }))
 # (st.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/st/archive/flexmaster.tar.gz";
 # # sha256="0cr9m8fay1dkfjxs9pbxwv5k3m5r3fiwbjp10kcd1rq2nbngcyby";
