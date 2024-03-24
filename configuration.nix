@@ -129,6 +129,9 @@
 	hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
 	services.blueman.enable = true;
 
+	hardware.trackpoint.speed = 50;
+	hardware.trackpoint.sensitivity = 100;
+
   # Enable sound with pipewire.
   sound.enable = true;
   # hardware.pulseaudio.enable = lib.mkForce false;
@@ -159,6 +162,14 @@
   nixpkgs.config.allowUnfree = true;
 
 # Define a user account. Don't forget to set a password with ‘passwd’.
+
+	programs.steam = {
+		enable = true;
+		remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+		dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+	};
+
+ # user packages
 	users.users.flex = {
 		isNormalUser = true;
 		description = "flex";
@@ -178,6 +189,7 @@
 
 # List packages installed in system profile. To search, run:
 # $ nix search wget
+# system packages
 	environment.systemPackages = with pkgs; [
 
 		bat
@@ -212,6 +224,7 @@
 		ripgrep
 		rustc
 		stalonetray
+		themechanger
 		tldr
 		tmux
 		tree
@@ -236,13 +249,15 @@
 # }; }))
 	];
 
+programs.dconf.enable = true;
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
 boot.blacklistedKernelModules = [ "snd_pcsp" ];
 
