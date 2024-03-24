@@ -104,8 +104,6 @@
 
 		windowManager.bspwm = {
 			enable = true;
-			configFile = ./dotfiles/bspwm/bspwmrc;
-			sxhkd.configFile = ./dotfiles/sxhkd/sxhkdrc;
 		};
 
 		# windowManager.xmonad = {
