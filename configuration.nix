@@ -198,6 +198,7 @@
 # system packages
 	environment.systemPackages = with pkgs; [
 
+		xlockmore
 		bat
 		bluez
 		btop
