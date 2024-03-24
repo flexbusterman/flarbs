@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-# pamixer -q set Master mute
-pactl set-sink-mute @DEFAULT_SINK@ 1
-amixer -c 1 set Master mute
-amixer -c 1 set Speaker mute

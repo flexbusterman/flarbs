@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-GOVERNOR=$(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor | tail -n 1)
-if [[ $GOVERNOR == "powersave" ]]; then
-    notify-send "Powersave CPU governor already active"
-else
-    SUDO_ASKPASS=~/.local/bin/dmenupass sudo -A cpupower frequency-set -g powersave && notify-send 'Powersave CPU governor'
-fi

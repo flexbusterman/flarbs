@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-xinput disable "TPPS/2 Elan TrackPoint"
-killall unclutter
-xmouseless
-xinput enable "TPPS/2 Elan TrackPoint"
-unclutter &

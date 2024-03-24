@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-SUDO_ASKPASS=~/.local/bin/dmenupass sudo -A systemctl restart bluetooth.service && notify-send 'Restarting bluetooth service'

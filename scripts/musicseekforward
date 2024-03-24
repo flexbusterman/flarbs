@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-playerctl -a position "5+" || mpc --host ~/.mpd/socket seek +5

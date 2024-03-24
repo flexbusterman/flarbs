@@ -1,6 +1,0 @@
-#!/bin/sh
-status=$(mpc status)
-playing=$(echo $status | awk '/playing/')
-if [ "$playing" ]; then
-	echo " $status" | awk 'NR==1'
-fi

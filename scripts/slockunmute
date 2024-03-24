@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-/home/$USER/.local/bin/mute
-/usr/local/bin/slock
-/home/$USER/.local/bin/remaps
-/home/$USER/.local/bin/unmute
-sleep 6
-[[ $(pactl list sinks | grep -i "bluetooth") ]] && /home/$USER/.local/bin/unmute

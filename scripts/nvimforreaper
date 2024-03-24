@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-/usr/bin/kitty nvim -c "set filetype=eel2" $1

@@ -1,2 +1,0 @@
-#!/bin/sh
-printf $(curl ipinfo.io/ip | tail -n 1)

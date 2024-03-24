@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-# reaper "/home/$USER/Dropbox/2021/2021-09-22 Click Reaper/Click 002.RPP" &
-reaper &
-cd ~/Dropbox/NOTES/; alacritty -o "font.size = 7" -e nvim "/home/$USER/Dropbox/NOTES/Drums.md"

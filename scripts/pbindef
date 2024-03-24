@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-INPUT=$(</dev/stdin)
-echo "$INPUT" | tail -n 2

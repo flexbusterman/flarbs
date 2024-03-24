@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-# brave --app="http://www.instagram.com/direct/inbox/"
-qutebrowser "http://www.instagram.com/direct/inbox/"

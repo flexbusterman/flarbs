@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-current=$(brightnessctl | awk '/Current/' | sed 's/.*(\([^%]*\).*/\1/');
-if [[ $current -ge 4 ]]; then
-	brightnessctl set $((current+current/2+1))%;
-else
-	brightnessctl set +1
-fi

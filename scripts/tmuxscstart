@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-# if tmux session SuperCollider is not running, start it
-if ! tmux has-session -t SuperCollider 2>/dev/null; then
-	tmux new -s SuperCollider "supercollider"
-else
-	# if it is running, attach to it
-	tmux attach -t SuperCollider
-fi

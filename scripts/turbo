@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-[[ $# != 2 ]] && echo "Usage: turbo [sting (space needs quotes)] [delay in sec]" && exit 1
-
-while [[ true ]]; do
-	xdotool type "$1"
-	sleep $2
-done

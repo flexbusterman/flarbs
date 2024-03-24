@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-VBoxManage startvm "win10"

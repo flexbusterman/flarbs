@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-cd ~/.local/src/dwm/
-make
-SUDO_ASKPASS=~/.local/bin/dmenupass sudo -A sudo make clean install
-killall dwm

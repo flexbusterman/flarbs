@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Script from LARBS modified a bit
-for x in "$@";do
-	pacman -Qq "$x" >/dev/null 2>&1 ||
-		{ notify-send "$x is missing" && exit 1 ;}
-done

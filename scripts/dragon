@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-# on arch linux, dragon is named dragon-drop
-# this is a wrapper script for running it in the backround
-dragon-drop -a -x "$@" 2>/dev/null &

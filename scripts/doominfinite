@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-gzdoom -iwad "/home/$USER/.local/share/Steam/steamapps/common/Doom 2/base/DOOM2.WAD" -file "/home/$USER/Dropbox/GAMES/Doom Infinite/DOOM_Infinite_DEMO_0978_6.pk3"
