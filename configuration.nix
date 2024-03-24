@@ -107,6 +107,11 @@
 		windowManager.bspwm = {
 			enable = true;
 		};
+
+		windowManager.spectrwm = {
+			enable = true;
+		};
+
 		# windowManager.xmonad = {
 		# 	enable = true;
 		# 	enableContribAndExtras = true;
@@ -182,6 +187,7 @@
 			reaper
 			slack
 			yt-dlp
+			supercollider-with-sc3-plugins
 
 		];
 
