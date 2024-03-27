@@ -109,17 +109,18 @@
 		# 		};
 		# 		});
 		# windowManager.dwm.enable = true;
-		windowManager.bspwm = {
-			enable = true;
-		};
 
-		windowManager.spectrwm = {
-			enable = true;
-		};
+		# windowManager.bspwm = {
+		# 	enable = true;
+		# };
 
-		windowManager.awesome = {
-			enable = true;
-		};
+		# windowManager.spectrwm = {
+		# 	enable = true;
+		# };
+
+		# windowManager.awesome = {
+		# 	enable = true;
+		# };
 
 		# windowManager.xmonad = {
 		# 	enable = true;
@@ -187,19 +188,16 @@
 	users.users.flex = {
 		isNormalUser = true;
 		description = "flex";
-		extraGroups = [ "networkmanager" "wheel" ];
+		extraGroups = [ "networkmanager" "wheel" "users"];
 		packages = with pkgs; [
-
-			dropbox
+			# dropbox
 			mpv
 			qutebrowser
-			reaper
-			slack
+			# reaper
+			# slack
 			yt-dlp
-			supercollider-with-sc3-plugins
-
+			# supercollider-with-sc3-plugins
 		];
-
 	};
 
 # List packages installed in system profile. To search, run:
@@ -207,6 +205,7 @@
 # system packages
 	environment.systemPackages = with pkgs; [
 
+		zsh
 		alacritty
 		acpi
 		sysstat
@@ -226,7 +225,6 @@
 		git
 		gnumake
 		killall
-		kitty
 		libnotify
 		neofetch
 		neovim
@@ -237,8 +235,6 @@
 		pavucontrol
 		polybarFull
 		pulsemixer
-		python3
-		python311Packages.xlib
 		ranger
 		ripgrep
 		rustc
@@ -249,13 +245,15 @@
 		tree
 		unzip
 		vim
-		w3m
 		wget
 		xclip
 		xorg.xkill
 		xsel
 		zplug
-		zsh
+		# kitty
+		# w3m
+		# python3
+		# python311Packages.xlib
 
 			(dmenu.overrideAttrs (oldAttrs: rec { src = builtins.fetchTarball { url = "https://github.com/flexbusterman/dmenu/archive/master.tar.gz";
 														sha256="15n6c1baba8mfncbzqzdbmv4116yblfm5kl7xl5mf6vpy40y433r";
