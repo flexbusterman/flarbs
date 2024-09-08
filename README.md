@@ -8,8 +8,7 @@ The purpose of these scripts is to speed up the installation of my
 personalized system setup, but decided to make it publicly available in
 case someone else finds them useful.\
 \
-If you find any errors or have ideas for improvements, as I'm sure there could be many, please feel free to make a pull request.\
-\
+If you find any errors or have ideas for improvements, as I'm sure there could be many, please feel free to make a pull request.
 
 ## Installation
 
@@ -20,4 +19,4 @@ using:\
 `git clone https://github.com/flexbusterman/flarbs.git;`\
 `cd flarbs;`\
 `sudo chmod +x flarbsinstall;`\
-`./flarbsinstall;`\
+`./flarbsinstall;`
