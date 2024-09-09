@@ -58,9 +58,9 @@ if ! [ -f $workDir/flarbspackagesmain ]; then
 	[ $continueWithoutPackagefile == "y" ] || exit 0
 fi
 
-[ $(command -v figlet) ] && figlet "Packages 1" || echo -e "\n##### PACKAGES 1 #####"
+[ $(command -v figlet) ] && figlet "Pre-Install Packages" || echo -e "\n##### PRE-INSTALL PACKAGES #####"
 echo "Installing mandatory packages"
-sudo pacman -Syu --needed neovim tmux ranger git kitty qutebrowser base-devel xclip man openssh pass gnupg rust unzip nodejs php ripgrep fzf sxhkd libxinerama zsh eza
+sudo pacman -Syu --needed neovim tmux ranger git kitty base-devel xclip man openssh pass gnupg rust unzip nodejs php ripgrep fzf sxhkd libxinerama zsh eza
 
 echo "Basic nvim settings"
 NVIM_CONFIG_DIR=~/.config/nvim/
@@ -220,11 +220,12 @@ else
 		dot reset --hard
 	fi
 
-	echo "Main packages install"
-	yes | yay -Syu --needed $(cat $workDir/flarbspackagesmain)
+[ $(command -v figlet) ] && figlet "Main Packages" || echo -e "\n##### MAIN PACKAGES #####"
+	yay -Syu --needed $(cat $workDir/flarbspackagesmain)
+[ $(command -v figlet) ] && figlet "Extra Packages" || echo -e "\n##### EXTRA PACKAGES #####"
 	echo "Install extra packages? You probably don't want all these. (y/n)"
 	read -n 1 -s installextra
-	[ $installextra == "y" ] && yes | yay -Syu --needed $(cat $workDir/flarbspackagesextra)
+	[ $installextra == "y" ] && yay -Syu --needed $(cat $workDir/flarbspackagesextra)
 
 	[ $(command -v figlet) ] && figlet "Systemd" || echo "##### SYSTEMD #####"
 	echo "Systemd services and config"
@@ -250,7 +251,7 @@ else
 	echo "Install proprietary Nvidia drivers along with modeset config? (y/n)"
 	read -n 1 -s nvidiainstall
 	if [ $nvidiainstall == "y" ]; then
-		yes | yay -Syu --needed $(cat $workDir/flarbspackagesnvidia)
+		yay -Syu --needed $(cat $workDir/flarbspackagesnvidia)
 		sudo mkdir -p /etc/modprobe.d/
 		echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia-drm.conf
 		sudo mkdir -p /etc/X11/xorg.conf.d/
