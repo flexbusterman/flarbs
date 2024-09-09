@@ -299,7 +299,7 @@ else
 		echo "sxiv is already installed."
 	fi
 
-	sudo chsh -s /usr/share/zsh "${USER}"
+	sudo chsh -s /usr/bin/zsh "${USER}"
 
 	echo "Reboot? (y/n)"
 	read -n 1 -s rebootnow
