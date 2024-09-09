@@ -58,6 +58,12 @@ if ! [ -f $workDir/flarbspackagesmain ]; then
 	[ $continueWithoutPackagefile == "y" ] || exit 0
 fi
 
+[ $(command -v figlet) ] && figlet "Pacman Config" || echo -e "\n##### PACMAN CONFIG #####"
+sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
+sudo sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 8/' /etc/pacman.conf
+sudo sed -i '/^#\[multilib\]/{N;s/^#\[multilib\]\n#Include/[multilib]\nInclude/}' /etc/pacman.conf
+sudo sed -i 's/^#MAKEFLAGS="-j2"/MAKEFLAGS="-j4"/' /etc/makepkg.conf
+
 [ $(command -v figlet) ] && figlet "Pre-Install Packages" || echo -e "\n##### PRE-INSTALL PACKAGES #####"
 echo "Installing mandatory packages"
 sudo pacman -Syu --needed neovim tmux ranger git kitty base-devel xclip man openssh pass gnupg rust unzip nodejs php ripgrep fzf sxhkd libxinerama zsh eza
@@ -77,10 +83,6 @@ if ! grep -q "^blacklist pcspkr" /etc/modprobe.d/nobeep.conf 2>/dev/null; then
 else
 	echo "PC speaker already blacklisted."
 fi
-
-sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
-sudo sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 8/' /etc/pacman.conf
-sudo sed -i 's/^#MAKEFLAGS="-j2"/MAKEFLAGS="-j4"/' /etc/makepkg.conf
 
 if ! grep -q "auth optional pam_gnupg.so" /etc/pam.d/system-local-login 2>/dev/null; then
 	[ $(command -v figlet) ] && figlet "pam_gnupg" || echo -e "\n##### pam_gnupg #####"
@@ -283,7 +285,7 @@ else
 
 	if ! command -v sxiv &> /dev/null; then
 		[ $(command -v figlet) ] && figlet "SXIV" || echo "##### SXIV #####"
-		echo "Installing sxiv (Suckless' Simple Terminal) custom build"
+		echo "Installing sxiv custom build"
 		echo "This build features vim-like normal mode (ctrl + shift + n)";
 		mkdir -p ~/.local/src/
 		cd ~/.local/src/
