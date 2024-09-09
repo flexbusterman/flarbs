@@ -221,7 +221,7 @@ else
 	fi
 
 	echo "Main packages install"
-	yes | yay -Syu --needed $(cat ~/.local/bin/flarbspackagesmain)
+	yes | yay -Syu --needed $(cat $workDir/flarbspackagesmain)
 	echo "Install extra packages? You probably don't want all these. (y/n)"
 	read -n 1 -s installextra
 	[ $installextra == "y" ] && yes | yay -Syu --needed $(cat $workDir/flarbspackagesextra)
