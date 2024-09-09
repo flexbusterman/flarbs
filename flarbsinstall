@@ -60,7 +60,7 @@ fi
 
 [ $(command -v figlet) ] && figlet "Packages 1" || echo -e "\n##### PACKAGES 1 #####"
 echo "Installing mandatory packages"
-sudo pacman -Syu --needed neovim tmux ranger git kitty qutebrowser base-devel xclip man openssh pass gnupg rust unzip nodejs php ripgrep fzf sxhkd libxinerama
+sudo pacman -Syu --needed neovim tmux ranger git kitty qutebrowser base-devel xclip man openssh pass gnupg rust unzip nodejs php ripgrep fzf sxhkd libxinerama zsh eza
 
 echo "Basic nvim settings"
 NVIM_CONFIG_DIR=~/.config/nvim/
@@ -237,7 +237,7 @@ else
 	[ -d /etc/timidity/ ] || sudo mkdir /etc/timidity/
 
 	if ! grep -q "^soundfont" /etc/timidity/timidity.cfg 2>/dev/null; then
-		echo "soundfont /usr/share/soundfonts/FluidR3_GM.sf2" | sudo tee /etc/timidity/timidity.cfg
+		echo "soundfont /usr/share/soundfonts/FluidR3_GM.sf2" | sudo tee -a /etc/timidity/timidity.cfg
 	else
 		echo "Timidity already configured"
 	fi
@@ -298,6 +298,8 @@ else
 	else
 		echo "sxiv is already installed."
 	fi
+
+	sudo chsh -s /usr/share/zsh "${USER}"
 
 	echo "Reboot? (y/n)"
 	read -n 1 -s rebootnow
