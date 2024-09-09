@@ -207,7 +207,8 @@ else
 		if [ ! -d "$HOME/.dot.git" ]; then
 			echo "Cloning flarbs dotfiles into a bare repository"
 			echo "alias dot='/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME'" >> $HOME/.bashrc
-			source $HOME/.bashrc
+			echo "alias dot='/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME'" >> $HOME/.zshrc
+			[[ $SHELL == "/usr/bin/zsh" ]] && source ~/.zshrc || source ~/.bashrc
 			echo ".dot.git" >> .gitignore
 			if [ $USER == "flex" ]; then
 				[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
