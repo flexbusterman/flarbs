@@ -1,4 +1,3 @@
-abook
 acpi
 acpid
 aic94xx-firmware
@@ -28,7 +27,6 @@ curlftpfs
 dconf-editor
 dialog
 docx2txt
-dotnet-runtime-7.0-bin
 dptfxtract-bin
 dragon-drop
 dunst
