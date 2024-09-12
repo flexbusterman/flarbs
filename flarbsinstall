@@ -307,6 +307,8 @@ else
 
 	sudo chsh -s /usr/bin/zsh "${USER}"
 
+sudo -E hardcode-tray --conversion-tool RSVGConvert --size 16 --theme Papirus
+
 	echo "Reboot? (y/n)"
 	read -n 1 -s rebootnow
 	[ $rebootnow == "y" ] && reboot
