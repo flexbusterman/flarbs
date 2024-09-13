@@ -1,5 +1,5 @@
-nvidia
-nvidia-utils
-nvidia-settings
-nvtop
-nvidia-prime
+mesa
+lib32-mesa
+vulkan-tools
+vulkan-nouveau
+lib32-vulkan-nouveau

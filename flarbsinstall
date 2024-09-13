@@ -251,17 +251,17 @@ else
 	sudo sed -i 's/^#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/' /etc/systemd/system.conf
 	sudo systemctl daemon-reload
 
-	[ $(command -v figlet) ] && figlet "Nvidia" || echo "##### NVIDIA #####"
-	echo "Unfortunately proprietary Nvidia drivers are needed to get dedicated and discrete graphics to co-exist on a Lenovo Legion 5 with working HDMI"
-	echo "Install proprietary Nvidia drivers along with modeset config? (y/n)"
+	[ $(command -v figlet) ] && figlet "Nouveau" || echo "##### NOUVEAU #####"
+	echo "Install open source nouveau drivers for nvidia graphic cards? (y/n)"
 	read -n 1 -s nvidiainstall
 	if [ $nvidiainstall == "y" ]; then
 		yay -Syu --needed $(cat $workDir/flarbspackagesnvidia)
-		sudo mkdir -p /etc/modprobe.d/
-		echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia-drm.conf
+		# sudo mkdir -p /etc/modprobe.d/
+		# echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia-drm.conf
 		sudo mkdir -p /etc/X11/xorg.conf.d/
-		sudo cp ~/.config/etc/X11/xorg.conf.d/* /etc/X11/xorg.conf.d/
-		sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
+		# sudo cp ~/.config/etc/X11/xorg.conf.d/* /etc/X11/xorg.conf.d/
+		# sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
+		sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs nouveau.config=NvGspRm=1"/' /etc/default/grub
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 	fi
 
