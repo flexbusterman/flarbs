@@ -33,7 +33,7 @@ lutris
 lv2-plugins
 mednafen
 mullvad-vpn-bin
-nginx-mainline
+nginx
 nvtop
 oldschool-pc-fonts
 pd
@@ -73,3 +73,4 @@ virtualbox-host-modules-arch
 watson
 yabridge
 yabridgectl
+activitywatch-bin
