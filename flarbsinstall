@@ -225,9 +225,9 @@ else
 		/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME reset --hard
 	fi
 
-[ $(command -v figlet) ] && figlet "Main Packages" || echo -e "\n##### MAIN PACKAGES #####"
+	[ $(command -v figlet) ] && figlet "Main Packages" || echo -e "\n##### MAIN PACKAGES #####"
 	yay -Syu --needed $(cat $workDir/flarbspackagesmain)
-[ $(command -v figlet) ] && figlet "Extra Packages" || echo -e "\n##### EXTRA PACKAGES #####"
+	[ $(command -v figlet) ] && figlet "Extra Packages" || echo -e "\n##### EXTRA PACKAGES #####"
 	echo "Install extra packages? You probably don't want all these. (y/n)"
 	read -n 1 -s installextra
 	[ $installextra == "y" ] && yay -Syu --needed $(cat $workDir/flarbspackagesextra)
@@ -251,18 +251,26 @@ else
 	sudo sed -i 's/^#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/' /etc/systemd/system.conf
 	sudo systemctl daemon-reload
 
-	[ $(command -v figlet) ] && figlet "Nouveau" || echo "##### NOUVEAU #####"
-	echo "Install open source nouveau drivers for nvidia graphic cards? (y/n)"
+	[ $(command -v figlet) ] && figlet "Nvidia" || echo "##### NVIDIA #####"
+	echo "Install nvidia drivers?"
+	echo "1: Install open source nouveau drivers"
+	echo "2: Install proprietary nvidia drivers"
+	echo "Other key: Continue without installing NVIDIA"
 	read -n 1 -s nvidiainstall
-	if [ $nvidiainstall == "y" ]; then
-		yay -Syu --needed $(cat $workDir/flarbspackagesnvidia)
-		# sudo mkdir -p /etc/modprobe.d/
-		# echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia-drm.conf
+	if [ $nvidiainstall == "1" ]; then
+		yay -Rns $(cat $workDir/flarbspackagesnvidia)
+		yay -Syu --needed $(cat $workDir/flarbspackagesnouveau)
+		sudo rm /etc/modprobe.d/nvidia-drm.conf
 		sudo mkdir -p /etc/X11/xorg.conf.d/
-		# sudo cp ~/.config/etc/X11/xorg.conf.d/* /etc/X11/xorg.conf.d/
-		# sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 		sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs nouveau.config=NvGspRm=1"/' /etc/default/grub
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
+	elif [ $nvidiainstall == "2" ]; then
+		yay -Rns $(cat $workDir/flarbspackagesnouveau)
+		yay -Syu --needed $(cat $workDir/flarbspackagesnvidia)
+		sudo mkdir -p /etc/modprobe.d/
+		echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia-drm.conf
+		sudo cp ~/.config/etc/X11/xorg.conf.d/* /etc/X11/xorg.conf.d/
+		sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 	fi
 
 	sudo usermod -a -G realtime $USER
@@ -307,7 +315,7 @@ else
 
 	sudo chsh -s /usr/bin/zsh "${USER}"
 
-sudo -E hardcode-tray --conversion-tool RSVGConvert --size 16 --theme Papirus
+	sudo -E hardcode-tray --conversion-tool RSVGConvert --size 16 --theme Papirus
 
 	echo "Reboot? (y/n)"
 	read -n 1 -s rebootnow

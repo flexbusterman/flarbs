@@ -1,5 +1,7 @@
 doomrl
 filezilla
+php-imagick
+wp-cli
 abook
 audio-convert
 blender
@@ -75,4 +77,3 @@ virtualbox-host-modules-arch
 watson
 yabridge
 yabridgectl
-activitywatch-bin
