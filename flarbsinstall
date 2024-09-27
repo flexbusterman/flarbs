@@ -273,8 +273,10 @@ else
 		sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 	fi
 
-	sudo usermod -a -G realtime $USER
-	sudo usermod -a -G vboxusers $USER
+	sudo usermod -aG realtime $USER
+	sudo usermod -aG vboxusers $USER
+	sudo usermod -aG input $USER
+	sudo usermod -aG games $USER
 	if [ ! -L /usr/share/soundfonts/default.sf2 ]; then
 		sudo ln -s /usr/share/soundfonts/FluidR3_GM.sf2 /usr/share/soundfonts/default.sf2
 	else

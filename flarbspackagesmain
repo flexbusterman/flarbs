@@ -27,6 +27,7 @@ curlftpfs
 dconf-editor
 dialog
 docx2txt
+dotool
 dptfxtract-bin
 dragon-drop
 dunst
@@ -147,6 +148,7 @@ wd719x-firmware
 wget
 wine
 winetricks
+wtype
 xbindkeys
 xcalib
 xcape
