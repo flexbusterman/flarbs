@@ -1,4 +1,5 @@
-dmenu-wayland-git
+texlive-plaingeneric
+texlive-latexextra
 wf-recorder
 fuzzel
 slurp
@@ -7,7 +8,6 @@ hyprpaper
 hyprland
 qt5-wayland
 swhkd-bin
-wl-clipboard
 xorg-xlsclients
 waybar
 xorg-xlsclients

@@ -77,14 +77,14 @@ else
 	echo "Nvim config directory already exists, skipping creation."
 fi
 
-if ! grep -q "^blacklist pcspkr" /etc/modprobe.d/nobeep.conf 2>/dev/null; then
+if ! grep -q "^blacklist pcspkr" /etc/modprobe.d/nobeep.conf; then
 	sudo rmmod pcspkr
 	echo "blacklist pcspkr" | sudo tee /etc/modprobe.d/nobeep.conf
 else
 	echo "PC speaker already blacklisted."
 fi
 
-if ! grep -q "auth optional pam_gnupg.so" /etc/pam.d/system-local-login 2>/dev/null; then
+if ! grep -q "auth optional pam_gnupg.so" /etc/pam.d/system-local-login; then
 	[ $(command -v figlet) ] && figlet "pam_gnupg" || echo -e "\n##### pam_gnupg #####"
 	# Add pam_gnupg to pam.d if not already added
 	sudo bash -c 'echo -e "auth optional pam_gnupg.so\nsession optional pam_gnupg.so" >> /etc/pam.d/system-local-login'
@@ -93,7 +93,7 @@ else
 	fi
 
 	if gpg -K --with-keygrip; then
-		if ! grep -q "allow-preset-passphrase" ~/.gnupg/gpg-agent.conf 2>/dev/null; then
+		if ! grep -q "allow-preset-passphrase" ~/.gnupg/gpg-agent.conf; then
 			[ ! -d ~/.gnupg ] && mkdir -p ~/.gnupg
 			echo -e "allow-preset-passphrase\ndefault-cache-ttl 34560000\nmax-cache-ttl 34560000" >> ~/.gnupg/gpg-agent.conf
 		else
@@ -242,7 +242,7 @@ else
 	[ -d ~/.config/mpd/playlists ] || mkdir -p ~/.config/mpd/playlists;
 	[ -d /etc/timidity/ ] || sudo mkdir /etc/timidity/
 
-	if ! grep -q "^soundfont" /etc/timidity/timidity.cfg 2>/dev/null; then
+	if ! grep -q "^soundfont" /etc/timidity/timidity.cfg; then
 		echo "soundfont /usr/share/soundfonts/FluidR3_GM.sf2" | sudo tee -a /etc/timidity/timidity.cfg
 	else
 		echo "Timidity already configured"
@@ -285,13 +285,13 @@ else
 
 	sudo systemctl disable --now lightdm
 
-	# Configure acpid if not already configured
-	if ! grep -q "^slockunmute" /etc/acpi/handler.sh 2>/dev/null; then
-		echo "blacklist pcspkr" | sudo tee /etc/modprobe.d/nobeep.conf
-		sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
-	else
-		echo "PC speaker already blacklisted."
-	fi
+if ! grep -q "slockunmute" /etc/acpi/handler.sh; then
+    sudo cp /etc/acpi/handler.sh /etc/acpi/handler.sh.bak
+    sudo sed -i "/[[:space:]]*close)/,/;;/c\            close)\n                logger 'LID closed'\n                DISPLAY=:0 su -c - $USER /home/$USER/.local/bin/slockunmute\n                ;;" /etc/acpi/handler.sh
+    echo "Updated /etc/acpi/handler.sh"
+else
+    echo "acpid already configured with slockunmute"
+fi
 
 	[ $(command -v figlet) ] && figlet "Done!"
 	echo "Installation complete"
