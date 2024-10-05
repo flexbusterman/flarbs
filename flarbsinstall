@@ -223,6 +223,7 @@ else
 		# dot reset --hard
 		# sometimes sourcing doesn't work correctly so doing this instead:
 		/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME reset --hard
+		/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME config --local status.showUntrackedFiles no
 	fi
 
 	[ $(command -v figlet) ] && figlet "Main Packages" || echo -e "\n##### MAIN PACKAGES #####"
