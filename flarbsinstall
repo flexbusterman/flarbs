@@ -286,13 +286,27 @@ else
 
 	sudo systemctl disable --now lightdm
 
-if ! grep -q "slockunmute" /etc/acpi/handler.sh; then
-    sudo cp /etc/acpi/handler.sh /etc/acpi/handler.sh.bak
-    sudo sed -i "/[[:space:]]*close)/,/;;/c\            close)\n                logger 'LID closed'\n                DISPLAY=:0 su -c - $USER /home/$USER/.local/bin/slockunmute\n                ;;" /etc/acpi/handler.sh
-    echo "Updated /etc/acpi/handler.sh"
-else
-    echo "acpid already configured with slockunmute"
-fi
+	if ! grep -q "slockunmute" /etc/acpi/handler.sh; then
+		echo "Setup slock screen locker and mute audio on lid close?"
+		read -n 1 -s setupslock
+		if [ $setupslock == "y" ]; then
+			sudo cp /etc/acpi/handler.sh /etc/acpi/handler.sh.bak
+			sudo sed -i "/[[:space:]]*close)/,/;;/c\            close)\n                logger 'LID closed'\n                DISPLAY=:0 su -c - $USER /home/$USER/.local/bin/slockunmute\n                ;;" /etc/acpi/handler.sh
+			mkdir -p ~/.local/src/;
+			cd ~/.local/src/;
+			if [ $USER == "flex" ]; then
+				[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+				git clone git@github.com:flexbusterman/slock.git
+			else
+				git clone https://github.com/flexbusterman/slock.git
+			fi
+			cd ~/.local/src/slock
+			make && sudo make clean install
+			echo "Updated /etc/acpi/handler.sh"
+		fi
+	else
+		echo "acpid already configured with slockunmute"
+	fi
 
 	[ $(command -v figlet) ] && figlet "Done!"
 	echo "Installation complete"
