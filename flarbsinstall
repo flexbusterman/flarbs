@@ -266,12 +266,7 @@ else
 		sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs nouveau.config=NvGspRm=1"/' /etc/default/grub
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 	elif [ $nvidiainstall == "2" ]; then
-		yay -Rns $(cat $workDir/flarbspackagesnouveau)
-		yay -Syu --needed $(cat $workDir/flarbspackagesnvidia)
-		sudo mkdir -p /etc/modprobe.d/
-		echo "options nvidia-drm modeset=1 fbdev=1" | sudo tee /etc/modprobe.d/nvidia-drm.conf
-		sudo cp ~/.config/etc/X11/xorg.conf.d/* /etc/X11/xorg.conf.d/
-		sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
+		$workDir/flarbsinstallnvidia
 	fi
 
 	sudo usermod -aG realtime $USER
