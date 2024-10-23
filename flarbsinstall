@@ -330,6 +330,7 @@ else
 	sudo -E hardcode-tray --conversion-tool RSVGConvert --size 16 --theme Papirus
 
 	git config --global pull.rebase true
+	git config --global status.showUntrackedFiles no
 
 	echo "Reboot? (y/n)"
 	read -n 1 -s rebootnow
