@@ -13,7 +13,7 @@ fi
 
 workDir="$(pwd)"
 
-read -n 1 -p "Setup GPG? (y/n)" gpgSetup;
+read -n 1 -p "Setup GPG? (y/n)" gpgSetup
 if [[ $gpgSetup == "y" ]]; then
 	gpgfileinput() {
 		echo -e "\nInput the full path to your gpg file"
@@ -27,10 +27,10 @@ if [[ $gpgSetup == "y" ]]; then
 			echo "File not found. Try (a)gain, (c)ontinue without adding the gpg key, or (q)uit the script?"
 			read -n 1 -s takeaction
 			case $takeaction in
-				c) gpgaction=false ;;
-				a) gpgfileinput ;;
-				q) exit ;;
-				*) echo -e "\nInvalid option. Please try again." ;;
+			c) gpgaction=false ;;
+			a) gpgfileinput ;;
+			q) exit ;;
+			*) echo -e "\nInvalid option. Please try again." ;;
 			esac
 		else
 			echo "File found: '$gpgfile'"
@@ -72,7 +72,7 @@ echo "Basic nvim settings"
 NVIM_CONFIG_DIR=~/.config/nvim/
 if [ ! -d "$NVIM_CONFIG_DIR" ]; then
 	mkdir -p "$NVIM_CONFIG_DIR"
-	echo -e "vim.opt.clipboard=\"unnamedplus\"\nvim.opt.mouse=\"\"" > ~/.config/nvim/init.lua
+	echo -e "vim.opt.clipboard=\"unnamedplus\"\nvim.opt.mouse=\"\"" >~/.config/nvim/init.lua
 else
 	echo "Nvim config directory already exists, skipping creation."
 fi
@@ -90,250 +90,252 @@ if ! grep -q "auth optional pam_gnupg.so" /etc/pam.d/system-local-login; then
 	sudo bash -c 'echo -e "auth optional pam_gnupg.so\nsession optional pam_gnupg.so" >> /etc/pam.d/system-local-login'
 else
 	echo "system-local-login already configured"
-	fi
+fi
 
-	if gpg -K --with-keygrip; then
-		if ! grep -q "allow-preset-passphrase" ~/.gnupg/gpg-agent.conf; then
-			[ ! -d ~/.gnupg ] && mkdir -p ~/.gnupg
-			echo -e "allow-preset-passphrase\ndefault-cache-ttl 34560000\nmax-cache-ttl 34560000" >> ~/.gnupg/gpg-agent.conf
+if gpg -K --with-keygrip; then
+	if ! grep -q "allow-preset-passphrase" ~/.gnupg/gpg-agent.conf; then
+		[ ! -d ~/.gnupg ] && mkdir -p ~/.gnupg
+		echo -e "allow-preset-passphrase\ndefault-cache-ttl 34560000\nmax-cache-ttl 34560000" >>~/.gnupg/gpg-agent.conf
+	else
+		echo "~/.gnupg/gpg-agent.conf already configured"
+	fi
+	gpg -K --with-keygrip | awk 'c&&!--c; /ssb/{c=1;}' | awk '{print $3}' >>~/.pam-gnupg
+	awk -i inplace '!a[$0]++' ~/.pam-gnupg
+else
+	echo "No GPG keys found"
+fi
+
+if ! command -v yay &>/dev/null; then
+	[ $(command -v figlet) ] && figlet "Yay" || echo "##### YAY #####"
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	git clone https://aur.archlinux.org/yay.git
+	cd yay
+	makepkg -si
+else
+	echo "Yay is already installed."
+fi
+
+if ! command -v st &>/dev/null; then
+	[ $(command -v figlet) ] && figlet "ST" || echo "##### ST #####"
+	echo "Installing st (Suckless' Simple Terminal) custom build"
+	echo "This build features vim-like normal mode (ctrl + shift + n)"
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	if [ $USER == "flex" ]; then
+		[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+		[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
+		git clone git@github.com:flexbusterman/st.git
+	else
+		git clone https://github.com/flexbusterman/st.git
+	fi
+	cd ~/.local/src/st
+	make && sudo make clean install && echo "st install successful"
+else
+	echo "ST is already installed."
+fi
+
+if ! command -v dwm &>/dev/null; then
+	[ $(command -v figlet) ] && figlet "DWM" || echo "##### DWM #####"
+	echo "Installing DWM (Suckless' Dynamic Window Manager) custom build"
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	if [ $USER == "flex" ]; then
+		[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+		[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
+		git clone git@github.com:flexbusterman/dwm.git
+	else
+		git clone https://github.com/flexbusterman/dwm.git
+	fi
+	cd ~/.local/src/dwm
+	make && sudo make clean install && echo "dwm install successful"
+else
+	echo "dwm is already installed."
+fi
+
+if ! command -v dwmblocks &>/dev/null; then
+	[ $(command -v figlet) ] && figlet "DWMblocks" || echo "##### DWMBLOCKS #####"
+	echo "Installing dwmblocks custom build"
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	if [ $USER == "flex" ]; then
+		[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+		[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
+		git clone git@github.com:flexbusterman/dwmblocks.git
+	else
+		git clone https://github.com/flexbusterman/dwmblocks.git
+	fi
+	cd ~/.local/src/dwmblocks
+	make && sudo make clean install && echo "dwmblocks install successful"
+else
+	echo "dwmblocks is already installed."
+fi
+
+if ! command -v dmenu &>/dev/null; then
+	[ $(command -v figlet) ] && figlet "Dmenu" || echo "##### DMENU #####"
+	echo "Installing Dmenu custom build"
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	if [ $USER == "flex" ]; then
+		[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+		[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
+		git clone git@github.com:flexbusterman/dmenu.git
+	else
+		git clone https://github.com/flexbusterman/dmenu.git
+	fi
+	cd ~/.local/src/dmenu
+	make && sudo make clean install && echo "dmenu install successful"
+else
+	echo "Dmenu is already installed"
+fi
+
+if grep -q "GRUB_TIMEOUT=5" /etc/default/grub; then
+	echo "Setting grub settings"
+	sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=3/' /etc/default/grub
+fi
+if grep -q 'GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"' /etc/default/grub; then
+	sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs"/' /etc/default/grub
+	sudo grub-mkconfig -o /boot/grub/grub.cfg
+else
+	echo "Grub settings already applied."
+fi
+
+echo "Cloning the Flarbs dotfiles will overwrite a lot of files on the system"
+echo "Clone and install the dotfiles? (y/n)"
+read -n 1 -s installDotfiles
+if [ $installDotfiles == "y" ]; then
+	if [ ! -d "$HOME/.dot.git" ]; then
+		echo "Cloning flarbs dotfiles into a bare repository"
+		echo "alias dot='/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME'" >>$HOME/.bashrc
+		echo "alias dot='/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME'" >>$HOME/.zshrc
+		[[ $SHELL == "/usr/bin/zsh" ]] && source ~/.zshrc || source ~/.bashrc
+		echo ".dot.git" >>.gitignore
+		if [ $USER == "flex" ]; then
+			[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+			[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
+			git clone --bare git@github.com:flexbusterman/dotfiles.git $HOME/.dot.git
 		else
-			echo "~/.gnupg/gpg-agent.conf already configured"
+			git clone --bare https://github.com/flexbusterman/dotfiles.git $HOME/.dot.git
 		fi
-		gpg -K --with-keygrip | awk 'c&&!--c; /ssb/{c=1;}' | awk '{print $3}' >> ~/.pam-gnupg;
-		awk -i inplace '!a[$0]++' ~/.pam-gnupg
 	else
-		echo "No GPG keys found"
+		echo "Dotfiles already cloned."
 	fi
+	# dot reset --hard
+	# sometimes sourcing doesn't work correctly so doing this instead:
+	/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME reset --hard
+	/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME config --local status.showUntrackedFiles no
+fi
 
-	if ! command -v yay &> /dev/null; then
-		[ $(command -v figlet) ] && figlet "Yay" || echo "##### YAY #####"
-		mkdir -p ~/.local/src/
-		cd ~/.local/src/
-		git clone https://aur.archlinux.org/yay.git
-		cd yay
-		makepkg -si
-	else
-		echo "Yay is already installed."
-	fi
+[ $(command -v figlet) ] && figlet "Main Packages" || echo -e "\n##### MAIN PACKAGES #####"
+yay -Syu --needed $(cat $workDir/flarbspackagesmain)
+[ $(command -v figlet) ] && figlet "Extra Packages" || echo -e "\n##### EXTRA PACKAGES #####"
+echo "Install extra packages? You probably don't want all these. (y/n)"
+read -n 1 -s installextra
+[ $installextra == "y" ] && yay -Syu --needed $(cat $workDir/flarbspackagesextra)
 
-	if ! command -v st &> /dev/null; then
-		[ $(command -v figlet) ] && figlet "ST" || echo "##### ST #####"
-		echo "Installing st (Suckless' Simple Terminal) custom build"
-		echo "This build features vim-like normal mode (ctrl + shift + n)";
+[ $(command -v figlet) ] && figlet "Systemd" || echo "##### SYSTEMD #####"
+echo "Systemd services and config"
+systemctl is-active --quiet bluetooth || sudo systemctl enable --now bluetooth
+
+[ $(command -v figlet) ] && figlet "MPD" || echo "##### MPD #####"
+systemctl --user is-active --quiet mpd.socket || systemctl --user enable --now mpd.socket
+systemctl --user is-active --quiet mpd || systemctl --user enable --now mpd
+[ -d ~/.config/mpd/playlists ] || mkdir -p ~/.config/mpd/playlists
+[ -d /etc/timidity/ ] || sudo mkdir /etc/timidity/
+
+if ! grep -q "^soundfont" /etc/timidity/timidity.cfg; then
+	echo "soundfont /usr/share/soundfonts/FluidR3_GM.sf2" | sudo tee -a /etc/timidity/timidity.cfg
+else
+	echo "Timidity already configured"
+fi
+
+sudo sed -i 's/^#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/' /etc/systemd/system.conf
+sudo systemctl daemon-reload
+
+[ $(command -v figlet) ] && figlet "Nvidia" || echo "##### NVIDIA #####"
+echo "Install nvidia drivers?"
+echo "1: Install open source nouveau drivers"
+echo "2: Install proprietary nvidia drivers"
+echo "Other key: Continue without installing NVIDIA"
+read -n 1 -s nvidiainstall
+if [ $nvidiainstall == "1" ]; then
+	yay -Rns $(cat $workDir/flarbspackagesnvidia)
+	yay -Syu --needed $(cat $workDir/flarbspackagesnouveau)
+	sudo rm /etc/modprobe.d/nvidia-drm.conf
+	sudo mkdir -p /etc/X11/xorg.conf.d/
+	sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs nouveau.config=NvGspRm=1"/' /etc/default/grub
+	sudo grub-mkconfig -o /boot/grub/grub.cfg
+elif [ $nvidiainstall == "2" ]; then
+	$workDir/flarbsinstallnvidia
+fi
+
+sudo usermod -aG realtime $USER
+sudo usermod -aG vboxusers $USER
+sudo usermod -aG input $USER
+sudo usermod -aG games $USER
+if [ ! -L /usr/share/soundfonts/default.sf2 ]; then
+	sudo ln -s /usr/share/soundfonts/FluidR3_GM.sf2 /usr/share/soundfonts/default.sf2
+else
+	echo "Soundfont already linked."
+fi
+
+sudo systemctl disable --now lightdm
+
+sudo systemctl enable --now atd
+
+if ! grep -q "slockunmute" /etc/acpi/handler.sh; then
+	echo "Setup slock screen locker and mute audio on lid close?"
+	read -n 1 -s setupslock
+	if [ $setupslock == "y" ]; then
+		sudo cp /etc/acpi/handler.sh /etc/acpi/handler.sh.bak
+		sudo sed -i "/[[:space:]]*close)/,/;;/c\            close)\n                logger 'LID closed'\n                DISPLAY=:0 su -c - $USER /home/$USER/.local/bin/slockunmute\n                ;;" /etc/acpi/handler.sh
 		mkdir -p ~/.local/src/
 		cd ~/.local/src/
 		if [ $USER == "flex" ]; then
 			[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
-			[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
-			git clone git@github.com:flexbusterman/st.git
+			git clone git@github.com:flexbusterman/slock.git
 		else
-			git clone https://github.com/flexbusterman/st.git
+			git clone https://github.com/flexbusterman/slock.git
 		fi
-		cd ~/.local/src/st
-		make && sudo make clean install && echo "st install successful"
+		cd ~/.local/src/slock
+		make && sudo make clean install
+		echo "Updated /etc/acpi/handler.sh"
+	fi
+else
+	echo "acpid already configured with slockunmute"
+fi
+
+[ $(command -v figlet) ] && figlet "Done!"
+echo "Installation complete"
+
+if ! command -v sxiv &>/dev/null; then
+	[ $(command -v figlet) ] && figlet "SXIV" || echo "##### SXIV #####"
+	echo "Installing sxiv custom build"
+	echo "This build features vim-like normal mode (ctrl + shift + n)"
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	if [ $USER == "flex" ]; then
+		[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+		[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
+		git clone git@github.com:flexbusterman/sxiv.git
 	else
-		echo "ST is already installed."
+		git clone https://github.com/flexbusterman/sxiv.git
 	fi
+	cd ~/.local/src/sxiv
+	make && sudo make clean install && echo "sxiv install successful"
+else
+	echo "sxiv is already installed."
+fi
 
-	if ! command -v dwm &> /dev/null; then
-		[ $(command -v figlet) ] && figlet "DWM" || echo "##### DWM #####"
-		echo "Installing DWM (Suckless' Dynamic Window Manager) custom build"
-		mkdir -p ~/.local/src/
-		cd ~/.local/src/
-		if [ $USER == "flex" ]; then
-			[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
-			[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
-			git clone git@github.com:flexbusterman/dwm.git
-		else
-			git clone https://github.com/flexbusterman/dwm.git
-		fi
-		cd ~/.local/src/dwm
-		make && sudo make clean install && echo "dwm install successful"
-	else
-		echo "dwm is already installed."
-	fi
+sudo chsh -s /usr/bin/zsh "${USER}"
 
-	if ! command -v dwmblocks &> /dev/null; then
-		[ $(command -v figlet) ] && figlet "DWMblocks" || echo "##### DWMBLOCKS #####"
-		echo "Installing dwmblocks custom build"
-		mkdir -p ~/.local/src/
-		cd ~/.local/src/
-		if [ $USER == "flex" ]; then
-			[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
-			[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
-			git clone git@github.com:flexbusterman/dwmblocks.git
-		else
-			git clone https://github.com/flexbusterman/dwmblocks.git
-		fi
-		cd ~/.local/src/dwmblocks
-		make && sudo make clean install && echo "dwmblocks install successful"
-	else
-		echo "dwmblocks is already installed."
-	fi
+sudo -E hardcode-tray --conversion-tool RSVGConvert --size 16 --theme Papirus
 
-	if ! command -v dmenu &> /dev/null; then
-		[ $(command -v figlet) ] && figlet "Dmenu" || echo "##### DMENU #####"
-		echo "Installing Dmenu custom build"
-		mkdir -p ~/.local/src/
-		cd ~/.local/src/
-		if [ $USER == "flex" ]; then
-			[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
-			[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
-			git clone git@github.com:flexbusterman/dmenu.git
-		else
-			git clone https://github.com/flexbusterman/dmenu.git
-		fi
-		cd ~/.local/src/dmenu
-		make && sudo make clean install && echo "dmenu install successful"
-	else
-		echo "Dmenu is already installed"
-	fi
+git config --global pull.rebase true
+git config --global status.showUntrackedFiles no
 
-	if grep -q "GRUB_TIMEOUT=5" /etc/default/grub; then
-		echo "Setting grub settings"
-		sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=3/' /etc/default/grub
-	fi
-	if grep -q 'GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"' /etc/default/grub; then
-		sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs"/' /etc/default/grub
-		sudo grub-mkconfig -o /boot/grub/grub.cfg
-	else
-		echo "Grub settings already applied."
-	fi
+sudo npm install -g neovim
 
-	echo "Cloning the Flarbs dotfiles will overwrite a lot of files on the system"
-	echo "Clone and install the dotfiles? (y/n)"
-	read -n 1 -s installDotfiles
-	if [ $installDotfiles == "y" ]; then
-		if [ ! -d "$HOME/.dot.git" ]; then
-			echo "Cloning flarbs dotfiles into a bare repository"
-			echo "alias dot='/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME'" >> $HOME/.bashrc
-			echo "alias dot='/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME'" >> $HOME/.zshrc
-			[[ $SHELL == "/usr/bin/zsh" ]] && source ~/.zshrc || source ~/.bashrc
-			echo ".dot.git" >> .gitignore
-			if [ $USER == "flex" ]; then
-				[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
-				[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
-				git clone --bare git@github.com:flexbusterman/dotfiles.git $HOME/.dot.git
-			else
-				git clone --bare https://github.com/flexbusterman/dotfiles.git $HOME/.dot.git
-			fi
-		else
-			echo "Dotfiles already cloned."
-		fi
-		# dot reset --hard
-		# sometimes sourcing doesn't work correctly so doing this instead:
-		/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME reset --hard
-		/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME config --local status.showUntrackedFiles no
-	fi
-
-	[ $(command -v figlet) ] && figlet "Main Packages" || echo -e "\n##### MAIN PACKAGES #####"
-	yay -Syu --needed $(cat $workDir/flarbspackagesmain)
-	[ $(command -v figlet) ] && figlet "Extra Packages" || echo -e "\n##### EXTRA PACKAGES #####"
-	echo "Install extra packages? You probably don't want all these. (y/n)"
-	read -n 1 -s installextra
-	[ $installextra == "y" ] && yay -Syu --needed $(cat $workDir/flarbspackagesextra)
-
-	[ $(command -v figlet) ] && figlet "Systemd" || echo "##### SYSTEMD #####"
-	echo "Systemd services and config"
-	systemctl is-active --quiet bluetooth || sudo systemctl enable --now bluetooth
-
-	[ $(command -v figlet) ] && figlet "MPD" || echo "##### MPD #####"
-	systemctl --user is-active --quiet mpd.socket || systemctl --user enable --now mpd.socket
-	systemctl --user is-active --quiet mpd || systemctl --user enable --now mpd
-	[ -d ~/.config/mpd/playlists ] || mkdir -p ~/.config/mpd/playlists;
-	[ -d /etc/timidity/ ] || sudo mkdir /etc/timidity/
-
-	if ! grep -q "^soundfont" /etc/timidity/timidity.cfg; then
-		echo "soundfont /usr/share/soundfonts/FluidR3_GM.sf2" | sudo tee -a /etc/timidity/timidity.cfg
-	else
-		echo "Timidity already configured"
-	fi
-
-	sudo sed -i 's/^#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=10s/' /etc/systemd/system.conf
-	sudo systemctl daemon-reload
-
-	[ $(command -v figlet) ] && figlet "Nvidia" || echo "##### NVIDIA #####"
-	echo "Install nvidia drivers?"
-	echo "1: Install open source nouveau drivers"
-	echo "2: Install proprietary nvidia drivers"
-	echo "Other key: Continue without installing NVIDIA"
-	read -n 1 -s nvidiainstall
-	if [ $nvidiainstall == "1" ]; then
-		yay -Rns $(cat $workDir/flarbspackagesnvidia)
-		yay -Syu --needed $(cat $workDir/flarbspackagesnouveau)
-		sudo rm /etc/modprobe.d/nvidia-drm.conf
-		sudo mkdir -p /etc/X11/xorg.conf.d/
-		sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 threadirqs nouveau.config=NvGspRm=1"/' /etc/default/grub
-		sudo grub-mkconfig -o /boot/grub/grub.cfg
-	elif [ $nvidiainstall == "2" ]; then
-		$workDir/flarbsinstallnvidia
-	fi
-
-	sudo usermod -aG realtime $USER
-	sudo usermod -aG vboxusers $USER
-	sudo usermod -aG input $USER
-	sudo usermod -aG games $USER
-	if [ ! -L /usr/share/soundfonts/default.sf2 ]; then
-		sudo ln -s /usr/share/soundfonts/FluidR3_GM.sf2 /usr/share/soundfonts/default.sf2
-	else
-		echo "Soundfont already linked."
-	fi
-
-	sudo systemctl disable --now lightdm
-
-	if ! grep -q "slockunmute" /etc/acpi/handler.sh; then
-		echo "Setup slock screen locker and mute audio on lid close?"
-		read -n 1 -s setupslock
-		if [ $setupslock == "y" ]; then
-			sudo cp /etc/acpi/handler.sh /etc/acpi/handler.sh.bak
-			sudo sed -i "/[[:space:]]*close)/,/;;/c\            close)\n                logger 'LID closed'\n                DISPLAY=:0 su -c - $USER /home/$USER/.local/bin/slockunmute\n                ;;" /etc/acpi/handler.sh
-			mkdir -p ~/.local/src/;
-			cd ~/.local/src/;
-			if [ $USER == "flex" ]; then
-				[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
-				git clone git@github.com:flexbusterman/slock.git
-			else
-				git clone https://github.com/flexbusterman/slock.git
-			fi
-			cd ~/.local/src/slock
-			make && sudo make clean install
-			echo "Updated /etc/acpi/handler.sh"
-		fi
-	else
-		echo "acpid already configured with slockunmute"
-	fi
-
-	[ $(command -v figlet) ] && figlet "Done!"
-	echo "Installation complete"
-
-	if ! command -v sxiv &> /dev/null; then
-		[ $(command -v figlet) ] && figlet "SXIV" || echo "##### SXIV #####"
-		echo "Installing sxiv custom build"
-		echo "This build features vim-like normal mode (ctrl + shift + n)";
-		mkdir -p ~/.local/src/
-		cd ~/.local/src/
-		if [ $USER == "flex" ]; then
-			[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
-			[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
-			git clone git@github.com:flexbusterman/sxiv.git
-		else
-			git clone https://github.com/flexbusterman/sxiv.git
-		fi
-		cd ~/.local/src/sxiv
-		make && sudo make clean install && echo "sxiv install successful"
-	else
-		echo "sxiv is already installed."
-	fi
-
-	sudo chsh -s /usr/bin/zsh "${USER}"
-
-	sudo -E hardcode-tray --conversion-tool RSVGConvert --size 16 --theme Papirus
-
-	git config --global pull.rebase true
-	git config --global status.showUntrackedFiles no
-
-	sudo npm install -g neovim
-
-	echo "Reboot? (y/n)"
-	read -n 1 -s rebootnow
-	[ $rebootnow == "y" ] && reboot
+echo "Reboot? (y/n)"
+read -n 1 -s rebootnow
+[ $rebootnow == "y" ] && reboot
