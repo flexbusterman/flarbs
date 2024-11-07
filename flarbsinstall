@@ -280,6 +280,7 @@ else
 fi
 
 sudo systemctl disable --now lightdm
+systemctl --user enable --now kanata
 
 sudo systemctl enable --now atd
 
