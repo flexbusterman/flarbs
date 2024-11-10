@@ -337,6 +337,17 @@ git config --global status.showUntrackedFiles no
 
 sudo npm install -g neovim
 
+echo "Install Kanata with cmd support?"
+read -n 1 -s kanatacmd
+if [ $kanatacmd == "y" ]; then
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	git clone https://github.com/jtroo/kanata
+	cd kanata
+	cargo build --release --features cmd
+	cargo install --features cmd
+fi
+
 echo "Reboot? (y/n)"
 read -n 1 -s rebootnow
 [ $rebootnow == "y" ] && reboot
