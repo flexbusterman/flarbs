@@ -273,6 +273,7 @@ sudo usermod -aG realtime $USER
 sudo usermod -aG vboxusers $USER
 sudo usermod -aG input $USER
 sudo usermod -aG games $USER
+sudo usermod -aG docker $USER
 if [ ! -L /usr/share/soundfonts/default.sf2 ]; then
 	sudo ln -s /usr/share/soundfonts/FluidR3_GM.sf2 /usr/share/soundfonts/default.sf2
 else
