@@ -224,6 +224,7 @@ if [ $installDotfiles == "y" ]; then
 	# sometimes sourcing doesn't work correctly so doing this instead:
 	/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME reset --hard
 	/usr/bin/git --git-dir=$HOME/.dot.git/ --work-tree=$HOME config --local status.showUntrackedFiles no
+	sudo cp $HOME/.config/etc/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/
 fi
 
 [ $(command -v figlet) ] && figlet "Main Packages" || echo -e "\n##### MAIN PACKAGES #####"
