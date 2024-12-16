@@ -135,6 +135,24 @@ else
 	echo "ST is already installed."
 fi
 
+if ! command -v sxiv &>/dev/null; then
+	[ $(command -v figlet) ] && figlet "sxiv" || echo "##### sxiv #####"
+	echo "Installing sxiv (Simple X Image Viewer) custom build"
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	if [ $USER == "flex" ]; then
+		[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+		[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
+		git clone git@github.com:flexbusterman/sxiv.git
+	else
+		git clone https://github.com/flexbusterman/sxiv.git
+	fi
+	cd ~/.local/src/sxiv
+	make && sudo make clean install && echo "sxiv install successful"
+else
+	echo "sxiv is already installed."
+fi
+
 if ! command -v dwm &>/dev/null; then
 	[ $(command -v figlet) ] && figlet "DWM" || echo "##### DWM #####"
 	echo "Installing DWM (Suckless' Dynamic Window Manager) custom build"
