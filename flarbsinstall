@@ -368,6 +368,16 @@ if [ $kanatacmd == "y" ]; then
 	cargo install --features cmd
 fi
 
+if [[ -f /usr/share/zsh/functions/Completion/Zsh/_timew ]]; then
+	echo "Timewarrior zsh completion already installed"
+else
+	if [[ ! -d ~/.local/src/timewarrior_zsh_completion ]]; then
+		[[ -d ~/.local/src ]] || mkdir -p ~/.local/src
+		git clone https://github.com/ianmkenney/timewarrior_zsh_completion.git ~/.local/src/timewarrior_zsh_completion
+	fi
+	sudo cp ~/.local/src/timewarrior_zsh_completion/_timew /usr/share/zsh/functions/Completion/Zsh/
+fi
+
 echo "Reboot? (y/n)"
 read -n 1 -s rebootnow
 [ $rebootnow == "y" ] && reboot
