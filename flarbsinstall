@@ -189,6 +189,24 @@ else
 	echo "dwmblocks is already installed."
 fi
 
+if ! command -v xmouseless &>/dev/null; then
+	[ $(command -v figlet) ] && figlet "xmouseless" || echo "##### xmouseless #####"
+	echo "Installing xmouseless for mouseless mouse control"
+	mkdir -p ~/.local/src/
+	cd ~/.local/src/
+	if [ $USER == "flex" ]; then
+		[ -f ~/.ssh/git ] && chmod 600 ~/.ssh/git* && eval $(ssh-agent -s) && ssh-add ~/.ssh/git
+		[ -d ~/.ssh/sockets ] || mkdir -p ~/.ssh/sockets
+		git clone git@github.com:flexbusterman/xmouseless.git
+	else
+		git clone https://github.com/flexbusterman/xmouseless.git
+	fi
+	cd ~/.local/src/xmouseless
+	make && sudo make clean install && echo "xmouseless install successful"
+else
+	echo "xmouseless is already installed."
+fi
+
 if ! command -v dmenu &>/dev/null; then
 	[ $(command -v figlet) ] && figlet "Dmenu" || echo "##### DMENU #####"
 	echo "Installing Dmenu custom build"
