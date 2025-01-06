@@ -1,3 +1,4 @@
+find-cursor
 sc-im-git
 texlive-meta
 abook
@@ -38,8 +39,6 @@ handbrake
 haskell-{tidal,bifunctors,colour,hosc,mwc-random,network,primitive,random,vector,microspec}
 helm-plugin
 higan-git
-hyprland
-hyprpaper
 ibm-fonts
 inkscape
 libreoffice-fresh
@@ -106,4 +105,3 @@ xorg-xlsclients
 yabridge
 yabridgectl
 zynaddsubfx
-sway
