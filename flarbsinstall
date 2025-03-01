@@ -309,6 +309,7 @@ fi
 sudo usermod -aG realtime $USER
 sudo usermod -aG vboxusers $USER
 sudo usermod -aG input $USER
+sudo usermod -aG video $USER
 sudo usermod -aG games $USER
 sudo usermod -aG docker $USER
 if [ ! -L /usr/share/soundfonts/default.sf2 ]; then

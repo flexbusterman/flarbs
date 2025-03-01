@@ -1,5 +1,7 @@
+iat
+sitala-bin
 find-cursor
-sc-im-git
+sc-im
 texlive-meta
 abook
 audio-convert
@@ -92,7 +94,6 @@ transmission-cli
 ttf-fira-mono
 ttf-font-awesome
 ttf-sazanami
-ventoy-bin
 virtualbox
 virtualbox-guest-iso
 virtualbox-guest-utils
