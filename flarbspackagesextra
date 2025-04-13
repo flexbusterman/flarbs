@@ -1,3 +1,6 @@
+zig
+aerc
+jsonrpc-glib
 iat
 sitala-bin
 find-cursor
@@ -59,7 +62,6 @@ php
 php-fpm
 php-imagick
 phpmyadmin
-pinta
 piper-tts-bin
 playerctl
 polybar
