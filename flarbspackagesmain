@@ -1,4 +1,6 @@
-swc-wl
+wev
+libappindicator-gtk3
+wl-clip-persist
 xautolock
 task
 taskopen
@@ -171,7 +173,6 @@ xorg-xfontsel
 xorg-xinit
 xorg-xinput
 xorg-xkill
-xsel
 xss-lock
 xterm
 xwallpaper
