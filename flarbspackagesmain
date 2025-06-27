@@ -157,7 +157,7 @@ wget
 wine
 winetricks
 wtype
-yazi-nightly-bin
+yazi
 yt-dlp
 ytfzf
 zathura
