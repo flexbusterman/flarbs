@@ -1,3 +1,4 @@
+dmenu-wl-dmenu-dropin
 sdbus-cpp
 ttf-bigblueterminal-nerd
 emacs
@@ -108,7 +109,6 @@ watson
 waybar
 wf-recorder
 wp-cli
-xorg-xlsclients
 yabridge
 yabridgectl
 zynaddsubfx
