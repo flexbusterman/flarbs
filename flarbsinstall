@@ -264,6 +264,7 @@ if [ $installDotfiles == "y" ]; then
 fi
 
 [ $(command -v figlet) ] && figlet "Main Packages" || echo -e "\n##### MAIN PACKAGES #####"
+yay -Rns --noconfirm htop
 yay -Syu --noconfirm --needed $(cat $workDir/flarbspackagesmain)
 [ $(command -v figlet) ] && figlet "Extra Packages" || echo -e "\n##### EXTRA PACKAGES #####"
 echo "Install extra packages? You probably don't want all these. (y/n)"
